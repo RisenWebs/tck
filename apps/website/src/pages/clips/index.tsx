@@ -8,7 +8,7 @@ export default function Clips() {
     <Layout title="Clips">
       <PageHeader title="Video Clips" />
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-5 max-w-[1200px] mx-auto">
         {/* STEP 01 */}
         <div className="flex flex-col rounded-lg bg-[#161625] p-4 text-white shadow-md h-full">
           <div className="flex items-center justify-between">
@@ -84,7 +84,7 @@ export default function Clips() {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between items-center mt-10">
+      <div className="flex flex-row justify-between items-center mt-10 max-w-[1200px] mx-auto">
         <div className="relative px-3 flex items-center">
           <img 
             src="https://cdn.discordapp.com/attachments/1327260674400714792/1329557035901128755/image.png?ex=678ac5fb&is=6789747b&hm=e90f4fe90a49a4da0c5b7e1720da21674594320c4e738fa954df84e549db3129&"
@@ -99,10 +99,10 @@ export default function Clips() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 mt-5 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 mt-5 md:grid-cols-4 max-w-[1200px] mx-auto">
         <div className="bg-[#161625] rounded-lg px-4 py-3">
           <div
-            className="text-center bg-cover bg-center p-6 rounded-lg"
+            className="text-center bg-cover bg-center py-6 px-3 rounded-lg"
             style={{
               backgroundImage: 'url(https://cdn.discordapp.com/attachments/1162174226380361859/1329571534351892540/image.png?ex=678ad37c&is=678981fc&hm=5f359cfaa9d6990d82a83956d4a9c88eca62e0b9fabd4e9fedb1d1d92a13c7b7&)',
             }}
