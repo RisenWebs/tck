@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import classes from './Button.module.scss';
 
-type ButtonVariants = 'primary' | 'secondary' | 'gradient';
+type ButtonVariants = 'primary' | 'secondary' | 'gradient' | 'gradient-roobet' | 'gradient-packdraw';
 
 function Button({
   children,

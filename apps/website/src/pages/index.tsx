@@ -7,6 +7,7 @@ import clsx from "clsx";
 import {
 	faAngleRight,
 	faExternalLink,
+	faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
@@ -25,10 +26,12 @@ import { SOCIALS_DATA } from "@/data/socials";
 import classes from "./index.module.scss";
 
 import roobetLogo from "@/images/affiliate/roobet.png";
+import packDrawLogo from "@/images/affiliate/packdraw.png";
+import packDrawBackground from "@/images/affiliate/packdraw-bg.png";
 import gfuelProducts from "@/images/gfuel/gfuel-products.png";
 import gfuelWordmark from "@/images/gfuel/gfuel-wordmark.png";
 import gfuelBackground from "@/images/gfuel/gfuel-background.png";
-import roobetBackground from "@/images/affiliate/roobet/promo.png"
+import roobetBackground from "@/images/affiliate/roobet/promo.png";
 import ak from "@/images/ak.png";
 import knife from "@/images/knife.png";
 import logo from "@/images/logo-hq.png";
@@ -37,6 +40,9 @@ import lollipop from "@/images/lollipop.png";
 import vs from "@/images/vs.png";
 import bags from "@/images/bags.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import AffiliateBoxCodeBox from "@/components/AffiliateBoxCodeBox/AffiliateBoxCodeBox";
+import h from "./AffiliateBox.module.scss";
 
 const CHANNEL = "tck";
 
@@ -308,9 +314,9 @@ function Home({ isLive }: { isLive: boolean }) {
 						<p className={classes.sectionDescription}>Affiliate Codes</p>
 						<p className={classes.sectionTitle}>Free Rewards</p>
 					</div>
-					<div className="flex flex-row justify-center w-full gap-4">
+					<div className="flex flex-row justify-center w-full gap-4 mt-5">
 						<div
-							className="w-1/2 h-[260px] relative overflow-hidden rounded-[8px] p-6"
+							className="w-1/2 h-[240px] relative overflow-hidden rounded-[8px] p-6"
 							style={{
 								background:
 									"radial-gradient(100% 100% at 50% 0%, rgba(30, 30, 49, 0.5) 0%, rgba(3, 3, 10, 0.5) 100%), #161625",
@@ -337,7 +343,7 @@ function Home({ isLive }: { isLive: boolean }) {
 								height={40}
 							/>
 
-							<div className="mt-3">
+							<div className="mt-3 z-[10]">
 								<h2 className="text-white text-lg font-bold">
 									Instant Roowards & $15 Reload
 								</h2>
@@ -347,43 +353,91 @@ function Home({ isLive }: { isLive: boolean }) {
 							</div>
 
 							{/* Input Box and Claim Button */}
-							<div className="absolute bottom-6 left-6 flex items-center gap-4">
-								<div className="flex items-center justify-between w-[163px] h-[45px] px-4 rounded-md relative">
-									{/* SVG Background */}
-									<svg
-										className="absolute inset-0 rounded-md"
-										xmlns="http://www.w3.org/2000/svg"
-										width="163"
-										height="45"
-										viewBox="0 0 163 45"
-										fill="none"
-									>
-										<path
-											d="M21.5855 1.11438L5.41904 2.6871C2.34487 2.98617 0 5.57021 0 8.65891V40.203C0 41.5726 0.392525 43.3929 1.76216 43.3929C2.4131 43.3929 6.11981 44.002 8.30235 44.3765C8.64161 44.4347 8.98388 44.4643 9.3281 44.4643H14.0973L18.5027 43.9286L23.7892 43.3929H30.3844C30.6863 43.3929 30.9877 43.4156 31.2861 43.461L33.9139 43.8604C34.2123 43.9058 34.5137 43.9286 34.8156 43.9286H39.0467C39.447 43.9286 39.8463 43.9686 40.2386 44.0481L44.3452 44.8804C44.7375 44.9599 45.1368 45 45.537 45H47.5784H57.2703H66.0811H75.773L97.1986 44.4789C97.5985 44.4692 97.9965 44.4195 98.3865 44.3306L104.48 42.9413C104.724 42.8856 104.958 42.7907 105.172 42.6605C105.537 42.4387 105.956 42.3214 106.382 42.3214H112.778L120.708 43.3929H132.162L141.385 43.9027C141.697 43.9199 142.01 43.9127 142.321 43.8812L157.605 42.3324C160.669 42.022 163 39.4425 163 36.363V4.1489C163 3.2359 162.524 2.38902 161.744 1.9147C161.411 1.71222 161.037 1.58675 160.649 1.54746L155.951 1.07143L151.421 0.612292C150.919 0.561443 150.413 0.574065 149.914 0.649858L147.141 1.07143L143.598 1.93306C143.026 2.07217 142.436 2.12635 141.849 2.09386L133.043 1.60714L123.351 0.535714L118.065 0H96.9189L65.6995 1.05456C65.3671 1.06579 65.0362 1.10463 64.7102 1.1707L59.9135 2.14286L52.5166 2.64257C52.1621 2.66652 51.8061 2.65893 51.4529 2.61989L42.2919 1.60714H32.6L22.4701 1.09388C22.1751 1.07893 21.8794 1.08579 21.5855 1.11438Z"
-											fill="#03030A"
-											fillOpacity="0.5"
-										/>
-									</svg>
-
-									{/* Text */}
-									<span className="relative text-white font-semibold">TCK</span>
-
-									{/* Button */}
-									<button className="relative w-[18px] h-[18px] bg-gray-700 rounded-full flex items-center justify-center">
-                    
-									</button>
+							<div className="absolute bottom-6 left-6 flex items-center gap-4 z-[9]">
+								<div className="w-[163px] h-[45px] relative z-[10]">
+									<AffiliateBoxCodeBox>TCK</AffiliateBoxCodeBox>
 								</div>
+
+								<Button
+									rightIcon={faAngleRight}
+									variant="gradient-roobet"
+									onClick={() => {
+										// handleClick(code.link);
+									}}
+								>
+									Claim
+								</Button>
 							</div>
 
 							{/* Placeholder for Bottom-Right Image */}
-              <Image
-                className="absolute bottom-0 -right-[100px] max-w-[450px] bg-cover bg-center"
-                alt="Roobet Background"
-                src={roobetBackground}
-              />
+							<Image
+								className="absolute bottom-0 -right-[100px] max-w-[400px] bg-cover bg-center z-[1]"
+								alt="Roobet Background"
+								src={roobetBackground}
+							/>
 						</div>
 
-						<div className="w-1/2 h-[260px] bg-white"></div>
+						<div
+							className="w-1/2 h-[240px] relative overflow-hidden rounded-[8px] p-6"
+							style={{
+								background:
+									"radial-gradient(100% 100% at 50% 0%, rgba(30, 30, 49, 0.5) 0%, rgba(3, 3, 10, 0.5) 100%), #161625",
+							}}
+						>
+							{/* Yellow Gradient */}
+							<div
+								style={{
+									position: "absolute",
+									width: "392px",
+									height: "95px",
+									left: "-123px",
+									bottom: "-73px",
+									background:
+										"linear-gradient(90deg, #A744FF 0%, #6E28AC 100%)",
+									filter: "blur(150px)",
+								}}
+							/>
+
+							<Image
+								src={packDrawLogo}
+								alt="Roobet Logo"
+								width={130}
+								height={40}
+							/>
+
+							<div className="mt-3 z-[10]">
+								<h2 className="text-white text-lg font-bold">
+									5% Deposit Bonus
+								</h2>
+								<p className="text-gray-400 text-sm">
+									Click on the button below to register instantly.
+								</p>
+							</div>
+
+							{/* Input Box and Claim Button */}
+							<div className="absolute bottom-6 left-6 flex items-center gap-4 z-[9]">
+								<div className="w-[163px] h-[45px] relative z-[10]">
+									<AffiliateBoxCodeBox>TCK</AffiliateBoxCodeBox>
+								</div>
+
+								<Button
+									rightIcon={faAngleRight}
+									variant="gradient-packdraw"
+									onClick={() => {
+										// handleClick(code.link);
+									}}
+								>
+									Claim
+								</Button>
+							</div>
+
+							{/* Placeholder for Bottom-Right Image */}
+							<Image
+								className="absolute bottom-0 -right-[0px] max-w-[230px] bg-cover bg-center z-[1]"
+								alt="Roobet Background"
+								src={packDrawBackground}
+							/>
+						</div>
 					</div>
 					<div
 						className={clsx(

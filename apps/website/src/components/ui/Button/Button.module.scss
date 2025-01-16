@@ -60,6 +60,69 @@
   animation: gradient 3.5s linear infinite forwards;
 }
 
+.gradient-roobet {
+  background: linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-roobet:hover {
+  @keyframes gradient-roobet {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-roobet 3.5s linear infinite forwards;
+}
+
+.gradient-roobet {
+  background: linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-roobet:hover {
+  @keyframes gradient-roobet {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-roobet 3.5s linear infinite forwards;
+}
+
+.gradient-packdraw {
+  background: linear-gradient(90deg, #A744FF 0%, #6E28AC 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-packdraw:hover {
+  @keyframes gradient-packdraw {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-packdraw 3.5s linear infinite forwards;
+}
+
 .fullWidth {
   width: 100%;
 }
