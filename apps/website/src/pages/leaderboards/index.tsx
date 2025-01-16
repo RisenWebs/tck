@@ -61,6 +61,8 @@ function Leaderboards({
   );
   const [selectedLeaderboard, setSelectedLeaderboard] = useState<ThemedLeaderboard>('roobet');
 
+  console.log(leaderboards);
+
   useEffect(() => {
     theme.setTheme('roobet');
   }, []);
