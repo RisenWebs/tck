@@ -1,0 +1,41 @@
+{
+  "name": "admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development next dev -p 8001",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production next start -p 8008",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "^11.11.0",
+    "@mantine/core": "^6.0.13",
+    "@mantine/dates": "^6.0.13",
+    "@mantine/dropzone": "^6.0.13",
+    "@mantine/hooks": "^6.0.13",
+    "@mantine/next": "^6.0.13",
+    "@mantine/notifications": "^6.0.13",
+    "@sentry/nextjs": "^7.66.0",
+    "@tabler/icons-react": "^2.22.0",
+    "axios": "^1.4.0",
+    "database": "*",
+    "dateformat": "^5.0.3",
+    "next": "13.4.4",
+    "react": "18.2.0",
+    "react-cookie": "^4.1.1",
+    "react-dom": "18.2.0",
+    "types": "*"
+  },
+  "devDependencies": {
+    "@types/node": "20.2.5",
+    "@types/react": "18.2.8",
+    "@types/react-dom": "18.2.4",
+    "cross-env": "^7.0.3",
+    "eslint": "8.42.0",
+    "eslint-config-custom": "*",
+    "sass": "^1.62.1",
+    "typescript": "^5.2.2"
+  }
+}

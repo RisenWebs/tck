@@ -1,0 +1,250 @@
+@use 'hero';
+
+.kickSectionDescription {
+  @extend .sectionDescription;
+
+  background: linear-gradient(90deg, #53fc18 0%, #369f11 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero {
+  height: 70vh;
+
+  justify-content: center;
+}
+
+.tckggLogo {
+  object-fit: contain;
+}
+
+.paragraph {
+  font-size: 14px;
+  color: #9391c9;
+}
+
+.description {
+  @extend .paragraph;
+
+  text-align: center;
+}
+
+.heroTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.buttonGroup {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 125px;
+  margin-bottom: 125px;
+
+  position: relative;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 35px;
+
+  position: relative;
+}
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sectionHeaderSvg {
+  position: absolute;
+  top: 0px;
+  z-index: -1;
+}
+
+.sectionTitle {
+  font-weight: 800;
+  font-size: 38px;
+  text-align: center;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+}
+
+.boxWrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.affiliateWrapper {
+  @extend .boxWrapper;
+
+  align-items: flex-end;
+}
+
+.fadedAffiliateWrapper {
+  position: absolute;
+  top: 210px;
+
+  opacity: 0.3;
+  z-index: -1;
+
+  transform: scale(0.95);
+
+  filter: blur(2px);
+
+  user-select: none;
+}
+
+.image {
+  position: absolute;
+
+  z-index: -1;
+  opacity: 0.75;
+
+  animation: float 10s ease-in-out infinite;
+}
+
+.livestreamBox {
+  background: #11111f;
+  border-radius: 10px;
+
+  width: 100%;
+  padding: 16px;
+
+  aspect-ratio: 16 / 9;
+}
+
+.livestream {
+  border-radius: 10px;
+
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes float {
+  0% {
+    transform: skew(-15deg, 15deg) translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: skew(-20deg, 20deg) translate(0px, 20px) scale(1.02);
+  }
+  100% {
+    transform: skew(-15deg, 15deg) translate(0px, 0px) scale(1);
+  }
+}
+
+.ak {
+  @extend .image;
+  bottom: 10%;
+  left: 5%;
+}
+
+.trophy {
+  @extend .image;
+  top: 10%;
+  left: 20%;
+  rotate: -25deg;
+  animation-delay: 1.5s;
+  @media screen and (max-width: 1024px) {
+    top: 0;
+    left: 0;
+  }
+}
+
+.bags {
+  @extend .image;
+  top: 30%;
+  left: 0%;
+  rotate: -25deg;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.vs {
+  @extend .image;
+  bottom: 10%;
+  right: 20%;
+  rotate: -15deg;
+  animation-delay: -2s;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.lollipop {
+  @extend .image;
+  bottom: 30%;
+  right: 0%;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.knife {
+  @extend .image;
+  rotate: 10deg;
+  top: 2%;
+  right: 8%;
+  animation-delay: -3s;
+  @media screen and (max-width: 1024px) {
+    top: 0;
+    right: 0;
+  }
+}
+
+.gfuelWrapper {
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gfuelDetails {
+  position: relative;
+  color: #9391c9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-left: 100px;
+  padding-right: 24px;
+}
+
+.gfuelDrinksImage {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gfuelBackground {
+  position: absolute;
+  object-fit: contain;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.objectContain {
+  object-fit: contain;
+}
+
+.externalLinkIcon {
+  color: #9391c9;
+}

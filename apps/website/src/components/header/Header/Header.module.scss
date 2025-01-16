@@ -1,0 +1,70 @@
+@use 'header' as header;
+
+.root {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  margin: auto;
+  max-width: 1256px;
+
+  padding: 20px 1em;
+
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+}
+
+.headerGroup {
+  display: flex;
+  flex: 1;
+
+  align-items: center;
+}
+.headerGroup:first-child {
+  justify-content: start;
+}
+.headerGroup:nth-child(2) {
+  justify-content: center;
+  gap: 20px;
+}
+.headerGroup:nth-child(3) {
+  justify-content: flex-end;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hamburger {
+  height: 24px;
+  
+  display: none;
+
+  cursor: pointer;
+}
+
+.component {
+  cursor: pointer;
+}
+
+@media screen and (max-width: header.$breakpoint) {
+  .hamburger {
+    display: block;
+  }
+
+  .headerGroup:first-child {
+    justify-content: center;
+    margin-left: 29px; // Width of hamburger + gap.
+  }
+  .headerGroup:nth-child(2) {
+    display: none;
+  }
+  .headerGroup:nth-child(3) {
+    display: none;
+  }
+}

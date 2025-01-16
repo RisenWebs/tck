@@ -1,0 +1,238 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Action {
+  ACCOUNT_CREATE
+  ACCOUNT_BAN
+  ACCOUNT_DELETE
+  ACCOUNT_UNBAN
+  ACCOUNT_LOGIN
+  CREATE_KICK_RAFFLE
+  GIVEAWAY_CREATE
+  GIVEAWAY_DELETE
+  GIVEAWAY_UPDATE
+  GIVEAWAY_JOIN
+  JOIN_KICK_RAFFLE
+  LINK_KICK
+  LINK_DISCORD
+  UPDATE_KICK
+  USER_POINTS_ADD
+  USER_POINTS_REMOVE
+  USER_POINTS_SET
+}
+
+enum Permission {
+  ACCESS_ADMIN_PANEL
+  CREATE_KICK_RAFFLE
+  MANAGE_USERS
+  MANAGE_LEADERBOARDS
+  MANAGE_RAFFLES
+  MANAGE_GIVEAWAYS
+  MANAGE_IPS
+  MANAGE_RELOADS
+  USER_BAN
+  USER_DELETE
+  USER_UNBAN
+  USER_MODIFY_PERMISSIONS
+  USER_POINTS_ADD
+  USER_POINTS_REMOVE
+  USER_POINTS_SET
+  USER_VIEW_ACTIVITY
+  USER_VIEW_CONNECTIONS
+  USER_VIEW_WALLET
+}
+
+model UserAction {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @db.ObjectId
+
+  action      Action
+  ip          String?
+  timestamp   Int
+  description String?
+}
+
+model KickAccount {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userAccount   UserAccounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId String       @unique @db.ObjectId
+
+  kickId       Int    @unique
+  kickUsername String @unique
+}
+
+model DiscordAccount {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userAccount   UserAccounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+  userAccountId String       @unique @db.ObjectId
+
+  discordId String @unique
+  discordUsername String @unique
+  discordAvatar String @unique
+  discordEmail String @unique
+}
+
+model UserAccounts {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @db.ObjectId
+
+  kick   KickAccount?
+  discord DiscordAccount?
+
+  csgobig String?
+  gamdom  String?
+  roobet  String?
+  twitch  String?
+}
+
+model UserWallets {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @db.ObjectId
+
+  bitcoin       String?
+  ethereum      String?
+  litecoin      String?
+  steamTradeUrl String?
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  email    String @unique
+  password String
+  apiKey   String @unique
+
+  accounts    UserAccounts?
+  wallets     UserWallets?
+  displayName String
+  isAnonymous Boolean       @default(false)
+
+  actions UserAction[]
+  points  Int          @default(0)
+
+  permissions Permission[]
+
+  isBanned   Boolean @default(false)
+  isVerified Boolean @default(false)
+
+  giveawayEntries GiveawayEntry[]
+  giveawayWins    Giveaway[]
+
+  accountVerification AccountVerification?
+
+  isDeleted Boolean @default(false)
+
+  kickVerification KickVerification?
+
+  createdKickRaffles KickRaffle[]
+}
+
+model BannedIp {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  ip         String @unique
+  bannedBy   String
+  bannedById String @db.ObjectId
+  reason     String
+  timestamp  Int    @default(0)
+}
+
+model LeaderboardSpot {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  username      String
+  amount        Int
+  avatar        String
+  leaderboard   Leaderboard? @relation(fields: [leaderboardId], references: [id])
+  leaderboardId String?      @db.ObjectId
+}
+
+model Leaderboard {
+  id    String            @id @default(auto()) @map("_id") @db.ObjectId
+  type  String            @unique
+  spots LeaderboardSpot[]
+}
+
+model GiveawayEntry {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  timestamp Int
+
+  slot       Int
+  giveaway   Giveaway @relation(fields: [giveawayId], references: [id])
+  giveawayId String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id], onDelete: NoAction)
+  userId     String   @db.ObjectId
+}
+
+model Giveaway {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  brand             String
+  value             Float
+  maxEntries        Int
+  image             String
+  entries           GiveawayEntry[]
+  timestampCreation Int
+  timestampEnd      Int
+  winner            User?           @relation(fields: [winnerId], references: [id])
+  winnerId          String?         @db.ObjectId
+}
+
+model StakeReloadEntry {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  timestamp Int
+
+  stakeUsername   String
+  discordUsername String
+}
+
+model RoobetReloadEntry {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  timestamp Int
+
+  roobetUsername   String
+  discordUsername String
+}
+
+model AccountVerification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @db.ObjectId
+
+  uuid String
+}
+
+model KickVerification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @db.ObjectId
+
+  verificationCode String
+
+  timestamp Int
+}
+
+model KickRaffle {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  duration Int
+  reward   Int
+  entries  Int[]
+
+  creator   User   @relation(fields: [creatorId], references: [id])
+  creatorId String @db.ObjectId
+
+  timestamp Int
+}

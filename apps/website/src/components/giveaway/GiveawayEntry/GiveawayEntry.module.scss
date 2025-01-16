@@ -1,0 +1,39 @@
+.root {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+  
+  background: rgba(152, 158, 174, 0.05);
+}
+
+.unclaimed {
+  border: 2px solid;
+  border-image: linear-gradient(315deg, rgba(152, 158, 174, 0.25) 0%, rgba(25, 25, 39, 0.25) 100%);
+  border-image-slice: 1;
+  border-collapse: separate;
+  mask-composite: exclude;
+}
+
+
+.entryDisplay {
+  font-weight: 700;
+}
+
+.display {
+  @extend .entryDisplay;
+  
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.position {
+  @extend .entryDisplay;
+  
+  color: #989eae;
+  font-size: 12px;
+}

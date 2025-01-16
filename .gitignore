@@ -1,0 +1,7 @@
+# Folders
+.turbo/
+node_modules/
+
+# Files
+.env
+.env.development

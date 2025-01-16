@@ -1,0 +1,17 @@
+$breakpoint: 950px;
+
+.link {
+  color: #9391C9;
+  font-weight: bold;
+}
+.link:hover {
+  text-decoration: none;
+
+  &:not(.active):not(.component) {
+    opacity: 0.85;
+  }
+}
+.active {
+  color: #ffffff;
+  opacity: 1;
+}

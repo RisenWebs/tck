@@ -1,0 +1,136 @@
+.root {
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+
+  padding: 12px 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  width: fit-content;
+  min-width: 35px;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: opacity 0.15s ease-in-out;
+
+  white-space: nowrap;
+}
+.root:hover {
+  opacity: 0.85;
+}
+
+.text {
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.primary {
+  color: #000000;
+  
+  background: #ffffff;
+}
+
+.secondary {
+  background: #26263a;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #18A9FF 0%, #7E06FF 50%, #18A9FF 100%);
+  background-size: 200% 100%;
+
+  background-position: 0% 0%;
+}
+.gradient:hover {
+  @keyframes gradient {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient 3.5s linear infinite forwards;
+}
+
+.gradient-roobet {
+  background: linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-roobet:hover {
+  @keyframes gradient-roobet {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-roobet 3.5s linear infinite forwards;
+}
+
+.gradient-roobet {
+  background: linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-roobet:hover {
+  @keyframes gradient-roobet {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-roobet 3.5s linear infinite forwards;
+}
+
+.gradient-packdraw {
+  background: linear-gradient(90deg, #A744FF 0%, #6E28AC 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-packdraw:hover {
+  @keyframes gradient-packdraw {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-packdraw 3.5s linear infinite forwards;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.disabled { 
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.disabled:hover {
+  opacity: 0.5;
+}

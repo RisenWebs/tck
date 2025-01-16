@@ -1,0 +1,12 @@
+.content {
+  flex-grow: 1;
+
+  max-width: 1288px;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+
+  padding: 0 1em;
+  
+  margin: auto;
+}

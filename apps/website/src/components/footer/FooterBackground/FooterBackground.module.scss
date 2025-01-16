@@ -1,0 +1,11 @@
+.root {
+  overflow: hidden;
+
+  position: relative;
+  min-width: 1920px;
+  height: 280px;
+
+  flex-grow: 1;
+
+  z-index: -1;
+}

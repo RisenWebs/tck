@@ -1,0 +1,37 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start:dev": "cross-env NODE_ENV=development node dist/index.js",
+    "dev": "cross-env NODE_ENV=development concurrently \"tsc -w --preserveWatchOutput\" \"nodemon dist\""
+  },
+  "dependencies": {
+    "@sapphire/decorators": "^6.0.2",
+    "@sapphire/discord.js-utilities": "7.0.1",
+    "@sapphire/framework": "^4.5.1",
+    "@sapphire/plugin-logger": "^3.0.5",
+    "@sapphire/utilities": "^3.13.0",
+    "@sentry/node": "^7.66.0",
+    "@sentry/profiling-node": "^1.2.0",
+    "database": "*",
+    "discord.js": "^14.11.0",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "@sapphire/cli": "^1.6.1",
+    "@sapphire/prettier-config": "^2.0.0",
+    "@sapphire/ts-config": "^4.0.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "eslint-config-custom": "*",
+    "types": "*",
+    "typescript": "^5.2.2"
+  }
+}

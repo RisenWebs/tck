@@ -1,0 +1,32 @@
+.root {
+  position: relative;
+  top: -50px;
+
+  opacity: 0.5;
+  
+  z-index: -1;
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  svg {
+    position: absolute;
+  }
+}
+
+.grid {
+  z-index: -1;
+}
+
+.glow {
+  z-index: -2;
+
+  top: -420px;
+  
+  min-width: 2496px;
+  max-width: 2496px;
+
+  min-height: 1404px;
+  max-height: 1404px;
+} 

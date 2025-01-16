@@ -1,0 +1,145 @@
+.root {
+  display: flex;
+  gap: 16px;
+}
+
+.left {
+  width: 308px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right {
+  flex-grow: 1;
+
+  border-radius: 8px;
+  background: radial-gradient(94.58% 94.58% at 50.00% 5.42%, rgba(29, 29, 47, 0.20) 0%, rgba(0, 0, 0, 0.00) 100%, rgba(22, 22, 37, 0.00) 100%), rgba(22, 22, 37, 0.50);
+  box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.33);
+  backdrop-filter: blur(45px);
+
+  max-height: 900px;
+
+  overflow-y: scroll;
+}
+
+.entryWrapper {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 22px;
+}
+
+.withOverlay {
+  overflow-y: hidden !important;
+}
+
+.mySlot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mySlotLeft {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  color: #989eae;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+  font-weight: 800;
+}
+.mySlotRight {
+  color: #989eae;
+  font-size: 14px;
+  font-weight: 700;
+
+  border-radius: 55px;
+  background: rgba(152, 158, 174, 0.15);
+
+  padding: 8px 15px;
+}
+
+.winnerOverlay {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 900px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 64px;
+
+  background: rgba(22, 22, 37, 0.66);
+  backdrop-filter: blur(10px);
+
+  overflow: hidden;
+}
+
+.giveawayWinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.winnerAvatar > div {
+  font-size: 36px;
+}
+
+.winnerName {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.winnerTicket {
+  color: #9391C9;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.viewAll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  cursor: pointer;
+
+  svg {
+    width: 9px;
+    height: 9px;
+
+    color: rgba(147, 145, 201, 0.75);
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.04));
+  }
+}
+
+.viewAllText {
+  color: #9391C9;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.04);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 950px) {
+  .root {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+  }
+
+  .right {
+    max-height: 500px;
+  }
+}

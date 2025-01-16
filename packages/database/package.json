@@ -1,0 +1,55 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf .turbo node_modules dist",
+    "db:format": "prisma format",
+    "db:generate": "prisma generate",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "dev": "cross-env NODE_ENV=development tsup --watch",
+    "lint": "eslint \"src/**/*.ts\"",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.15.0",
+    "@reverse/array": "^1.7.3",
+    "@sendgrid/mail": "^7.7.0",
+    "@sentry/node": "^7.66.0",
+    "@sentry/profiling-node": "^1.2.0",
+    "backblaze-b2": "^1.7.0",
+    "bcrypt": "^5.1.0",
+    "crypto": "^1.0.1",
+    "custom-util": "*",
+    "date-fns": "^2.30.0",
+    "mongodb": "^6.0.0",
+    "multicoin-address-validator": "^0.5.16",
+    "proxycheck-ts": "^0.0.9",
+    "random-org": "^2.2.0",
+    "sanitize-html": "^2.11.0",
+    "socket.io-client": "^4.7.2",
+    "types": "*",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/backblaze-b2": "^1.5.2",
+    "@types/multicoin-address-validator": "^0.5.2",
+    "@types/sanitize-html": "^2.9.5",
+    "cross-env": "^7.0.3",
+    "eslint-config-custom": "*",
+    "prisma": "^4.15.0",
+    "rimraf": "^3.0.2",
+    "tsconfig": "*",
+    "tsup": "^5.11.13",
+    "tsx": "^3.7.1",
+    "typescript": "^5.2.2"
+  }
+}
