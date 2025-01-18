@@ -11,6 +11,8 @@ import TheProviderProvider from '@/components/TheProviderProvider';
 import ModalProfile from '@/components/profile/ModalProfile/ModalProfile';
 import axios from "axios";
 
+import IAmLiveImage from "@/images/iamlive.png";
+
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import '../styles/globals.scss';
 
@@ -64,7 +66,7 @@ function App({ Component, pageProps }: AppProps) {
             <div
               className="w-[230px] h-[150px] bg-cover relative"
               style={{
-                backgroundImage: 'url(https://cdn.discordapp.com/attachments/1162174226380361859/1329423478150926397/image.png?ex=678a4998&is=6788f818&hm=a382ba7358e4f089f8e4085406c63ec1006b2c712b3b6e964b771c2595b42afe&)',
+                backgroundImage: `url(${IAmLiveImage.src})`,
               }}
             ></div>
             <iframe
