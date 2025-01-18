@@ -56,7 +56,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
   };
 
   return (
-    <div className="bg-[#161625] rounded-lg px-4 py-3 relative hover:-translate-y-1 transition-transform">
+    <div className="bg-[#161625] rounded-lg px-4 py-3 relative hover:-translate-y-1 transition-transform h-[320px] hover:cursor-grab">
       {/* Thumbnail */}
       <div className="w-full rounded-md overflow-hidden">
         <img

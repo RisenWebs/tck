@@ -2,6 +2,7 @@ import Layout from "@/components/Layout/Layout";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import { faInstagram, faTiktok, faTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 import ClipCard from "@/components/Clips/ClipCard";
 import ClipRewardCard, { Style } from "@/components/Clips/ClipRewardCard";
@@ -110,9 +111,9 @@ export default function Clips() {
 						YOUTUBE
 					</span>
 				</div>
-				<button className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
+				<Link href={"/clips/youtube"} className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
 					View All
-				</button>
+				</Link>
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-4 max-w-[1200px] mx-auto h-[320px]">
@@ -156,7 +157,7 @@ export default function Clips() {
 				<div className="relative px-3 flex items-center">
 					<img
             src={ClipsBgTile.src}
-            alt="youtube"
+            alt="tiktok"
 						className="w-[48px] h-[30px] absolute inset-0"
 					/>
 					<FontAwesomeIcon
@@ -167,9 +168,9 @@ export default function Clips() {
 						TIKTOK
 					</span>
 				</div>
-				<button className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
+				<Link href={"/clips/tiktok"} className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
 					View All
-				</button>
+				</Link>
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-4 max-w-[1200px] mx-auto h-[320px]">
@@ -213,7 +214,7 @@ export default function Clips() {
 				<div className="relative px-3 flex items-center">
 					<img
             src={ClipsBgTile.src}
-            alt="youtube"
+            alt="instagram"
 						className="w-[48px] h-[30px] absolute inset-0"
 					/>
 					<FontAwesomeIcon
@@ -224,9 +225,9 @@ export default function Clips() {
 						INSTAGRAM
 					</span>
 				</div>
-				<button className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
+				<Link href={"/clips/instagram"} className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
 					View All
-				</button>
+				</Link>
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-4 max-w-[1200px] mx-auto h-[320px]">
@@ -270,7 +271,7 @@ export default function Clips() {
 				<div className="relative px-3 flex items-center">
 					<img
             src={ClipsBgTile.src}
-            alt="youtube"
+            alt="twitter"
 						className="w-[48px] h-[30px] absolute inset-0"
 					/>
 
@@ -279,12 +280,12 @@ export default function Clips() {
           </svg>
 
 					<span className="ml-2 text-white font-medium italic z-[5]">
-						YOUTUBE
+            TWITTER
 					</span>
 				</div>
-				<button className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
+				<Link href={"/clips/twitter"} className="flex items-center bg-[#26263A] px-4 py-2 text-sm font-medium text-white rounded-md transition-colors hover:opacity-90">
 					View All
-				</button>
+				</Link>
 			</div>
 
 			<div className="grid grid-cols-1 gap-6 mt-5 sm:grid-cols-2 lg:grid-cols-4 max-w-[1200px] mx-auto h-[320px]">

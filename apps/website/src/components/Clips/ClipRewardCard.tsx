@@ -103,7 +103,7 @@ const ClipRewardCard: React.FC<ClipRewardCardProps> = ({
           onClick={onUploadClip}
           aria-label="Upload your clip"
         >
-          Upload your clip
+          Upload your clips
         </button>
       </div>
     </div>
