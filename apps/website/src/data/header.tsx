@@ -3,11 +3,11 @@ import HeaderItemRewards from '@/components/header/HeaderItemRewards/HeaderItemR
 interface HeaderItem {
   href?: string;
   label: string;
+  labelIcon?: React.ReactNode;
   component?: React.ReactNode;
 }
 
 export const HEADER_ITEMS: HeaderItem[] = [
-  { href: '/', label: 'HOME' },
   { label: 'REWARDS', component: <HeaderItemRewards /> },
   { href: '/reloads', label: 'RELOADS' },
   { href: '/leaderboards', label: 'LEADERBOARDS' },

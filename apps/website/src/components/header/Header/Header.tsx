@@ -43,7 +43,7 @@ function Header() {
         </Link>
       </div>
       <div className={classes.headerGroup}>
-        {HEADER_ITEMS.map(({ href, label, component }) => {
+        {HEADER_ITEMS.map(({ href, label, labelIcon, component }) => {
           const isActive = router.pathname === href;
 
           return href ? (
@@ -56,6 +56,7 @@ function Header() {
                 !href && classes.component
               )}
             >
+              {labelIcon && <span className="icon-class mr-2">{labelIcon}</span>}
               {component || label}
             </Link>
           ) : (
@@ -67,6 +68,7 @@ function Header() {
             </span>
           );
         })}
+
       </div>
       <div className={classes.headerGroup}>
         {auth.user ? (
