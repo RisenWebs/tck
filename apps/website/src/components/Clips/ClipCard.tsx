@@ -1,6 +1,5 @@
-// ClipCard.tsx
-import React from 'react';
-import StarBg from '../svg/Star'; // Ensure this path is correct based on your project structure
+import React from "react";
+import StarBg from "../svg/Star"; // Adjust path as needed
 
 interface ClipCardProps {
   thumbnailSrc: string;
@@ -10,7 +9,7 @@ interface ClipCardProps {
   dislikes: number;
   avatarSrc: string;
   username: string;
-  position: number; // Renamed from commentCount to position
+  position: number;
 }
 
 const ClipCard: React.FC<ClipCardProps> = ({
@@ -23,61 +22,54 @@ const ClipCard: React.FC<ClipCardProps> = ({
   username,
   position,
 }) => {
-  // Function to render position
+  // Renders the position with star backgrounds for top 3
   const renderPosition = (pos: number) => {
     const isTopThree = pos >= 1 && pos <= 3;
-
     if (isTopThree) {
       return (
         <div className="relative inline-block">
-          <StarBg position={pos} /> {/* SVG background for positions 1-3 */}
+          <StarBg position={pos} />
           <span className="absolute inset-0 right-0.5 flex justify-center items-center text-white text-sm font-semibold">
             {pos}
           </span>
         </div>
       );
     } else {
-      // For positions 4 and above, append the appropriate suffix
-      const suffixes: { [key: number]: string } = {
-        1: 'st',
-        2: 'nd',
-        3: 'rd',
-      };
+      // For positions 4+ (append suffix)
+      const suffixes: { [key: number]: string } = { 1: "st", 2: "nd", 3: "rd" };
       const lastDigit = pos % 10;
       const lastTwoDigits = pos % 100;
 
-      let suffix = 'th';
+      let suffix = "th";
       if (lastTwoDigits < 11 || lastTwoDigits > 13) {
-        suffix = suffixes[lastDigit] || 'th';
+        suffix = suffixes[lastDigit] || "th";
       }
-
       return <span>{`${pos}${suffix}`}</span>;
     }
   };
 
   return (
-    <div className="bg-[#161625] rounded-lg px-4 py-3 relative hover:-translate-y-1 transition-transform h-[320px] hover:cursor-grab">
-      {/* Thumbnail */}
-      <div className="w-full rounded-md overflow-hidden">
+    <div className="bg-[#161625] rounded-lg shadow-md hover:-translate-y-1 transition-transform hover:cursor-pointer overflow-hidden flex flex-col">
+      {/* Thumbnail with fixed aspect ratio (if you have Tailwind’s aspect-ratio plugin) */}
+      <div className="relative aspect-w-16 aspect-h-9 w-full">
         <img
           src={thumbnailSrc}
           alt="Slot clip preview"
-          className="w-full object-cover"
+          className="w-full h-full object-cover"
         />
       </div>
 
-      {/* Title and Views */}
-      <h3 className="text-white text-md font-semibold truncate mt-2">
-        {title}
-      </h3>
+      {/* Title and views */}
+      <div className="flex-grow p-3">
+        <h3 className="text-white text-sm font-semibold line-clamp-1">{title}</h3>
+        <span className="text-[#989EAE] text-xs font-medium">{views} Views</span>
+      </div>
 
-      <span className="text-[#989EAE] text-sm font-medium mt-1">
-        {views} Views
-      </span>
-
-      <div className="absolute bottom-0 left-0 w-full px-4 h-[95px] bg-[#03030B54] outline-t-[1px] outline-black">
-        <div className="flex justify-center items-center mt-3 text-sm font-semibold">
-          <button className="w-full rounded-l-md bg-[#26263A]  bg-gradient-to-b from-[#2EFF691A] to-[#26263A1A] text-[#2EFF69] py-2 transition-opacity hover:brightness-90 flex items-center justify-center gap-1">
+      {/* Bottom area */}
+      <div className="px-3 pb-3">
+        <div className="flex space-x-1 text-sm font-semibold">
+          {/* Like button */}
+          <button className="w-full rounded-l-md bg-[#26263A] bg-gradient-to-b from-[#2EFF691A] to-[#26263A1A] text-[#2EFF69] py-2 flex items-center justify-center gap-1 hover:brightness-90">
             {/* Like Icon */}
             <svg
               width="12"
@@ -110,9 +102,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
                   <feOffset dy="1" />
                   <feGaussianBlur stdDeviation="0.5" />
                   <feComposite in2="hardAlpha" operator="out" />
-                  <feColorMatrix
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
-                  />
+                  <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
                   <feBlend
                     in2="BackgroundImageFix"
                     result="effect1_dropShadow_2634_3575"
@@ -127,9 +117,9 @@ const ClipCard: React.FC<ClipCardProps> = ({
             </svg>
             {likes}
           </button>
-          <button 
-            className="w-full rounded-r-md bg-[#161624] bg-gradient-to-b from-[#FF51261A] to-[#1616241A] text-[#FF5126] py-2 transition-opacity hover:brightness-90 flex items-center justify-center gap-1"
-          >
+
+          {/* Dislike button */}
+          <button className="w-full rounded-r-md bg-[#161624] bg-gradient-to-b from-[#FF51261A] to-[#1616241A] text-[#FF5126] py-2 flex items-center justify-center gap-1 hover:brightness-90">
             {/* Dislike Icon */}
             <svg
               width="12"
@@ -139,7 +129,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
             >
               <g filter="url(#b)">
                 <path
-                  d="M10.3 6.4L6.2 10.4h-0.6L1.5 6.4c-0.3-0.3 0-0.7 0.4-0.7l2.5.5V0.9c0-0.2 0.1-0.4 0.4-0.4h2.1c0.3 0 0.5 0.2 0.5 0.4v5.3l2.5-0.5c0.4 0 0.6 0.4 0.4 0.7Z"
+                  d="M10.3 6.4 6.2 10.4h-.6l-4.1-4c-.3-.3 0-.7.4-.7l2.5.5V.9c0-.2.1-.4.4-.4h2.1c.3 0 .5.2.5.4v5.3l2.5-.5c.4 0 .6.4.4.7Z"
                   fill="#FF5126"
                 />
               </g>
@@ -162,9 +152,7 @@ const ClipCard: React.FC<ClipCardProps> = ({
                   <feOffset dy="1" />
                   <feGaussianBlur stdDeviation="0.5" />
                   <feComposite in2="hardAlpha" operator="out" />
-                  <feColorMatrix
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"
-                  />
+                  <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
                   <feBlend
                     in2="BackgroundImageFix"
                     result="effect1_dropShadow_2634_3578"
@@ -180,21 +168,19 @@ const ClipCard: React.FC<ClipCardProps> = ({
             {dislikes}
           </button>
         </div>
-        <div className="my-2 mt-2.5 flex justify-between h-[25px]">
+
+        <div className="mt-2 flex items-center justify-between">
           <div className="flex items-center">
             <img
               src={avatarSrc}
               alt={`${username} avatar`}
-              className="h-[22px] w-[22px] rounded-full"
+              className="h-6 w-6 rounded-full object-cover"
             />
             <span className="ml-1.5 text-white text-sm font-semibold">
               {username}
             </span>
           </div>
-
-          <div className="text-white text-sm">
-            {renderPosition(position)}
-          </div>
+          <div className="text-white text-sm">{renderPosition(position)}</div>
         </div>
       </div>
     </div>
