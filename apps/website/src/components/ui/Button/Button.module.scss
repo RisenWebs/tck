@@ -123,6 +123,28 @@
   animation: gradient-packdraw 3.5s linear infinite forwards;
 }
 
+.gradient-csgobig {
+  background: linear-gradient(90deg, #E1B56F 0%, #94713B 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+}
+
+.gradient-csgobig:hover {
+  @keyframes gradient-packdraw {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 200% 0%;
+    }
+  }
+  animation: gradient-csgobig 3.5s linear infinite forwards;
+}
+
+
 .fullWidth {
   width: 100%;
 }
