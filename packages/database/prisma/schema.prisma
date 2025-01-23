@@ -48,6 +48,49 @@ enum Permission {
   USER_VIEW_WALLET
 }
 
+enum Platform {
+  YOUTUBE
+  TIKTOK
+  TWITTER
+  INSTAGRAM
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+model Vote {
+  id        String   @id @default(cuid()) @map("_id")
+  userId    String
+  clipId    String
+  voteType  VoteType
+  createdAt DateTime @default(now()) 
+
+  user      User     @relation(fields: [userId], references: [id])
+  clip      Clip     @relation(fields: [clipId], references: [id])
+
+  @@unique([userId, clipId])
+  @@index([userId])
+  @@index([clipId])
+  @@index([voteType]) 
+}
+
+model Clip {
+  id          String   @id @default(cuid()) @map("_id")
+  title       String
+  platform    Platform 
+  videoClip   String   @unique 
+  authorUser  String
+  authorPfp   String 
+  createdAt   DateTime @default(now()) 
+  updatedAt   DateTime @updatedAt 
+
+  votes       Vote[]   
+
+  @@index([platform])
+}
+
 model UserAction {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -123,6 +166,7 @@ model User {
   points  Int          @default(0)
 
   permissions Permission[]
+  votes        Vote[]
 
   isBanned   Boolean @default(false)
   isVerified Boolean @default(false)
