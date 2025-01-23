@@ -29,7 +29,7 @@ function Raffles({ ipData }: { ipData: IpData[] }) {
   const permissions = usePermissions();
 
   const [search, setSearch] = useState('');
-  const [selectedIp, setSelectedIp] = useState<null | string>(null);
+  const [selectedIp, setSelectedIp] = useState<null | string>(null);\
   const [isIpModalOpen, { open: openIpModal, close: closeIpModal }] = useDisclosure(false);
 
   useEffect(() => {
