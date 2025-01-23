@@ -2,7 +2,7 @@ import JaggedBackgroundItem from "@/components/JaggedBackgroundItem/JaggedBackgr
 import Layout from "@/components/Layout/Layout";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import tckcoin from "@/images/coin.png"
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 interface CardProps {
     logoSvg: JSX.Element;
@@ -11,7 +11,7 @@ interface CardProps {
     rewardAmount: string | number;
     buttonText?: string;
     onButtonClick: () => void;
-    rewardImage: string;
+    rewardImage: StaticImageData;
 }
 
 
