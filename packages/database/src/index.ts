@@ -3,6 +3,7 @@ import { ProfilingIntegration } from '@sentry/profiling-node';
 
 export * from './client';
 
+export * from './functions/clips';
 export * from './functions/admin';
 export * from './functions/backblaze';
 export * from './functions/collection';
@@ -19,6 +20,7 @@ export * from './functions/user/fetch';
 export * from './functions/user/points';
 export * from './functions/user/user';
 export * from './functions/user/wallets';
+
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
