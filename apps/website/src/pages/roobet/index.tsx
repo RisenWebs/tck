@@ -6,8 +6,9 @@ import Layout from '@/components/Layout/Layout';
 import { useTheme } from '@/hooks/theme';
 import { useEffect, useState, lazy } from 'react';
 import JaggedBackgroundItem from '@/components/JaggedBackgroundItem/JaggedBackgroundItem';
+import roobetDemo from '@/images/affiliate/roobet/demo.png';
 import clsx from 'clsx';
-
+import Link from 'next/link';
 
 type RewardProps = {
   tier: string;
@@ -18,44 +19,24 @@ type RewardProps = {
 };
 
 const rankToImageName = (rank: string) => `${rank.split(' ')[0].toLowerCase()}_${{ I: "1", II: "2", III: "3", IV: "4" }[rank.split(' ')[1]] || "1"}`;
-const rewards: RewardProps[] = [
-  { tier: "SILVER I", wager: "$5,000", reward: "5.00", claimed: false, canClaim: true },
-  { tier: "SILVER II", wager: "$10,000", reward: "10.00", claimed: false, canClaim: false },
-  { tier: "SILVER III", wager: "$25,000", reward: "20.00", claimed: false, canClaim: false },
-  { tier: "SILVER IV", wager: "$50,000", reward: "25.00", claimed: false, canClaim: false },
-];
-
-const RewardCard: React.FC<RewardProps> = ({ tier, wager, reward, claimed, canClaim }) => {
-  return (
-    <div className="flex items-center justify-between bg-[#202032] p-4 rounded-lg shadow-md">
-      <div className="flex items-center space-x-4">
-        <div className="w-10 h-10 bg-[#03030A54] rounded-lg flex items-center justify-center">
-          <Image src={`/img/roobeticons/${rankToImageName(tier)}.png`} className='w-[60%]' unoptimized width={100} height={100} alt='roobet rank image'></Image>
-        </div>
-        <div>
-          <h3 className="text-lg font-extrabold italic text-white">{tier}</h3>
-          <p className="text-sm text-gray-400">Wager {wager}</p>
-        </div>
-      </div>
-      <div className="flex items-center space-x-4">
-        <p className="text-lg font-bold text-gray-200">${reward}</p>
-        {claimed ? (
-          <button
-            className="px-4 py-2 bg-gray-600 text-gray-400 rounded-lg cursor-not-allowed"
-            disabled
-          >
-            Claimed
-          </button>
-        ) : (
-          <button className={clsx("px-4 py-2 text-white font-bold rounded-lg", canClaim
-            ? 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] hover:from-[#DDAA3F] hover:to-[#9A6A25]' 
-            : 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] opacity-40 shadow-inner')}>
-            Claim
-          </button>
-        )}
-      </div>
-    </div>
-  );
+const rewards: Record<string, RewardProps[]> = {
+  silver: [
+    { tier: "SILVER I", wager: "$5,000", reward: "5.00", claimed: false, canClaim: true },
+    { tier: "SILVER II", wager: "$10,000", reward: "10.00", claimed: false, canClaim: false },
+    { tier: "SILVER III", wager: "$25,000", reward: "20.00", claimed: false, canClaim: false },
+    { tier: "SILVER IV", wager: "$50,000", reward: "25.00", claimed: false, canClaim: false },
+  ],
+  gold: [
+    { tier: "GOLD I", wager: "$75,000", reward: "30.00", claimed: false, canClaim: false },
+    { tier: "GOLD II", wager: "$100,000", reward: "40.00", claimed: false, canClaim: false },
+    { tier: "GOLD III", wager: "$150,000", reward: "50.00", claimed: false, canClaim: false },
+    { tier: "GOLD IV", wager: "$200,000", reward: "60.00", claimed: false, canClaim: false },
+  ],
+  diamond: [
+    { tier: "DIAMOND I", wager: "$250,000", reward: "70.00", claimed: false, canClaim: false },
+    { tier: "DIAMOND II", wager: "$500,000", reward: "100.00", claimed: false, canClaim: false },
+    { tier: "DIAMOND III", wager: "$1,000,000", reward: "150.00", claimed: false, canClaim: false },
+  ],
 };
 
 function Roobet() {
@@ -63,9 +44,53 @@ function Roobet() {
   const [code] = useState("TCK");
   const [rank, setRank] = useState("Silver I");
   const [rankPath, setRankPath] = useState("");
+  const [tier, setTier] = useState("silver");
   const [progress, setProgress] = useState(10);
   const [remaining, setRemaining] = useState(8000);
   const [amountWagered, setAmountWagered] = useState(0);
+  const tierKeys = Object.keys(rewards);
+  let currentIndex = tierKeys.indexOf(tier);
+
+  const handleNavigation = (direction: "up" | "down") => {
+    currentIndex = tierKeys.indexOf(tier);
+    if (direction === "up" && currentIndex > 0)
+      setTier(tierKeys[currentIndex - 1]);
+    else if (direction === "down" && currentIndex < tierKeys.length - 1)
+      setTier(tierKeys[currentIndex + 1]);
+  };
+
+  const RewardCard: React.FC<RewardProps> = ({ tier, wager, reward, claimed, canClaim }) => {
+    return (
+      <div className="flex items-center justify-between bg-[#202032] p-4 rounded-lg shadow-md">
+        <div className="flex items-center space-x-4">
+          <div className="w-10 h-10 bg-[#03030A54] rounded-lg flex items-center justify-center">
+            <Image src={`/img/roobeticons/${rankToImageName(tier)}.png`} className='w-[60%]' unoptimized width={100} height={100} alt='roobet rank image'></Image>
+          </div>
+          <div>
+            <h3 className="text-lg font-extrabold italic text-white">{tier}</h3>
+            <p className="text-sm text-gray-400">Wager {wager}</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          <p className="text-lg font-bold text-gray-200">${reward}</p>
+          {claimed ? (
+            <button
+              className="px-4 py-2 bg-gray-600 text-gray-400 rounded-lg cursor-not-allowed"
+              disabled
+            >
+              Claimed
+            </button>
+          ) : (
+            <button className={clsx("px-4 py-2 text-white font-bold rounded-lg", canClaim
+              ? 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] hover:from-[#DDAA3F] hover:to-[#9A6A25]'
+              : 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] opacity-40 shadow-inner')}>
+              Claim
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const copyCode = () => {
     navigator.clipboard.writeText(code);
@@ -500,9 +525,33 @@ function Roobet() {
           }}>
 
             <div className="py-4 px-4">
-              <h1 className="text-3xl font-bold text-white mb-6">{rank.split(" ")[0]}</h1>
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-3xl font-bold text-white">{rank.split(" ")[0]}</h1>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleNavigation("up")}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ease-in-out ${currentIndex === 0
+                      ? "bg-[#26263A] cursor-not-allowed opacity-[25%]"
+                      : "bg-[#26263A] hover:opacity-[75%]"
+                      }`}
+                    disabled={currentIndex === 0}
+                  >
+                    <span className="text-white">↑</span>
+                  </button>
+                  <button
+                    onClick={() => handleNavigation("down")}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ease-in-out ${currentIndex === tierKeys.length - 1
+                      ? "bg-[#26263A] cursor-not-allowed opacity-[25%]"
+                      : "bg-[#26263A] hover:opacity-[75%]"
+                      }`}
+                    disabled={currentIndex === tierKeys.length - 1}
+                  >
+                    <span className="text-white">↓</span>
+                  </button>
+                </div>
+              </div>
               <div className="space-y-4">
-                {rewards.map((reward, index) => (
+                {rewards[tier].map((reward, index) => (
                   <RewardCard
                     key={index}
                     tier={reward.tier}
@@ -515,6 +564,114 @@ function Roobet() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="text-white py-16 px-8">
+          <div className="relative border-2 border-transparent rounded-lg flex justify-between items-center h-[20vh] px-6 md:px-8 lg:px-12">
+
+            <div className='flex flex-col items-baseline gap-2'>
+              <div className="flex flex-col items-baseline gap-2">
+                <div>
+                  <h1 className="text-white text-3xl md:text-4xl font-bold">Visit Roobet<span className='text-[#989EAE]'>.com  </span></h1>
+                  <p className="text-[#989EAE] text-sm md:text-base">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center flex-col justify-start gap-3">
+                <JaggedBackgroundItem fullWidth={false} fill="#161623">
+                  <div className='flex w-[8vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
+                    <span className='w-full text-white inline-block text-left font-bold'>
+                      {code}
+                    </span>
+
+                    <div className="aspect-square w-[3vh] bg-[#989EAE54] rounded-full flex items-center justify-center sm:w-[4vh]">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 6 7"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M0.742191 2.53506H3.48647C3.89466 2.53506 4.22866 2.84828 4.22866 3.23097V5.8041C4.22866 6.18683 3.89461 6.5 3.48647 6.5H0.742191C0.334001 6.5 0 6.18678 0 5.8041V3.23097C0 2.84823 0.334051 2.53506 0.742191 2.53506ZM2.51353 0.500058H5.25781C5.666 0.500058 6 0.813276 6 1.19596V3.76909C6 4.15183 5.66595 4.465 5.25781 4.465H4.54041V3.23091C4.54041 2.6875 4.06623 2.24289 3.48668 2.24289H1.77149V1.1959C1.77149 0.813171 2.10554 0.5 2.51368 0.5L2.51353 0.500058Z"
+                          fill="#989EAE"
+                        />
+                      </svg>
+                    </div>
+
+                  </div>
+                </JaggedBackgroundItem>
+
+                <button className="flex items-center bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] text-white py-2 px-4 rounded-lg text-sm md:text-base font-semibold hover:scale-105 transition-all">
+                  <span>Register Instantly</span>
+                  <svg
+                    className="ml-2"
+                    width="12"
+                    height="18"
+                    viewBox="0 0 9 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M2.62792 10.3923C2.55824 10.4614 2.46502 10.5 2.36799 10.5C2.27095 10.5 2.17771 10.4614 2.10804 10.3923C2.07385 10.3583 2.04667 10.3176 2.02811 10.2727C2.00956 10.2278 2 10.1795 2 10.1307C2 10.0819 2.00956 10.0337 2.02811 9.98874C2.04667 9.94381 2.07385 9.90313 2.10804 9.86911L6.01976 5.93156L2.10923 2.13029C2.07517 2.09645 2.0481 2.05598 2.02961 2.01126C2.01112 1.96653 2.00158 1.91847 2.00158 1.86991C2.00158 1.82135 2.01112 1.77329 2.02961 1.72856C2.0481 1.68384 2.07517 1.64334 2.10923 1.6095C2.17834 1.53936 2.27179 1.5 2.36918 1.5C2.46656 1.5 2.56 1.53936 2.62911 1.6095L7 5.93156L2.62792 10.3923Z"
+                      fill="white"
+                      fillOpacity="0.75"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="hidden lg:block w-[100%] h-full">
+              <Image
+                src={roobetDemo}
+                alt="Side Illustration"
+                className="h-full object-cover rounded-r-lg"
+              />
+            </div>
+          </div>
+
+          <div className="relative flex flex-col items-center justify-center text-white overflow-hidden">
+
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-12 left-16 w-24 h-24 bg-indigo-600 opacity-20 rotate-45 transform -z-10" />
+              <div className="absolute bottom-24 right-20 w-36 h-36 bg-indigo-600 opacity-10 rotate-45 transform -z-10" />
+              <div className="absolute top-1/3 left-1/3 w-28 h-28 bg-indigo-600 opacity-5 rotate-45 transform -z-10" />
+            </div>
+
+            <div className="relative z-10 p-8 rounded-lg text-center">
+              <div className="flex flex-col items-center justify-center text-white">
+                <h1 className="text-4xl font-bold">High Roller Rewards</h1>
+                <p className="mt-4 text-lg text-center">
+                  Are you a High Roller? Make a ticket in our Discord and learn about our Exclusive VIP Rewards.
+                </p>
+                <Link
+                  href="https://discord.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 px-6 py-3 bg-[#26263A] rounded-md text-white flex items-center gap-2 hover:opacity-75 transition-all"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 32 32"
+                    className="w-5 h-5" 
+                    fill="currentColor"
+                  >
+                    <path d="M20.992 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.050 0.005 0.109 0.005 0.168 0 1.523-1.191 2.768-2.693 2.854l-0.008 0zM11.026 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.048 0.005 0.104 0.005 0.161 0 1.525-1.19 2.771-2.692 2.862l-0.008 0zM26.393 6.465c-1.763-0.832-3.811-1.49-5.955-1.871l-0.149-0.022c-0.005-0.001-0.011-0.002-0.017-0.002-0.035 0-0.065 0.019-0.081 0.047l-0 0c-0.234 0.411-0.488 0.924-0.717 1.45l-0.043 0.111c-1.030-0.165-2.218-0.259-3.428-0.259s-2.398 0.094-3.557 0.275l0.129-0.017c-0.27-0.63-0.528-1.142-0.813-1.638l0.041 0.077c-0.017-0.029-0.048-0.047-0.083-0.047-0.005 0-0.011 0-0.016 0.001l0.001-0c-2.293 0.403-4.342 1.060-6.256 1.957l0.151-0.064c-0.017 0.007-0.031 0.019-0.040 0.034l-0 0c-2.854 4.041-4.562 9.069-4.562 14.496 0 0.907 0.048 1.802 0.141 2.684l-0.009-0.11c0.003 0.029 0.018 0.053 0.039 0.070l0 0c2.14 1.601 4.628 2.891 7.313 3.738l0.176 0.048c0.008 0.003 0.018 0.004 0.028 0.004 0.032 0 0.060-0.015 0.077-0.038l0-0c0.535-0.72 1.044-1.536 1.485-2.392l0.047-0.1c0.006-0.012 0.010-0.027 0.010-0.043 0-0.041-0.026-0.075-0.062-0.089l-0.001-0c-0.912-0.352-1.683-0.727-2.417-1.157l0.077 0.042c-0.029-0.017-0.048-0.048-0.048-0.083 0-0.031 0.015-0.059 0.038-0.076l0-0c0.157-0.118 0.315-0.24 0.465-0.364 0.016-0.013 0.037-0.021 0.059-0.021 0.014 0 0.027 0.003 0.038 0.008l-0.001-0c2.208 1.061 4.8 1.681 7.536 1.681s5.329-0.62 7.643-1.727l-0.107 0.046c0.012-0.006 0.025-0.009 0.040-0.009 0.022 0 0.043 0.008 0.059 0.021l-0-0c0.15 0.124 0.307 0.248 0.466 0.365 0.023 0.018 0.038 0.046 0.038 0.077 0 0.035-0.019 0.065-0.046 0.082l-0 0c-0.661 0.395-1.432 0.769-2.235 1.078l-0.105 0.036c-0.036 0.014-0.062 0.049-0.062 0.089 0 0.016 0.004 0.031 0.011 0.044l-0-0.001c0.501 0.96 1.009 1.775 1.571 2.548l-0.040-0.057c0.017 0.024 0.046 0.040 0.077 0.040 0.010 0 0.020-0.002 0.029-0.004l-0.001 0c2.865-0.892 5.358-2.182 7.566-3.832l-0.065 0.047c0.022-0.016 0.036-0.041 0.039-0.069l0-0c0.087-0.784 0.136-1.694 0.136-2.615 0-5.415-1.712-10.43-4.623-14.534l0.052 0.078c-0.008-0.016-0.022-0.029-0.038-0.036l-0-0z"></path>
+                  </svg>
+                  Join Server
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </Layout>
