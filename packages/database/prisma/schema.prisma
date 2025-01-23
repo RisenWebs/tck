@@ -54,6 +54,7 @@ enum Platform {
   TIKTOK
   TWITTER
   INSTAGRAM
+  KICK
 }
 
 enum VoteType {
