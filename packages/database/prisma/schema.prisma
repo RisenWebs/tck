@@ -46,6 +46,7 @@ enum Permission {
   USER_VIEW_ACTIVITY
   USER_VIEW_CONNECTIONS
   USER_VIEW_WALLET
+  MANAGE_CLIPS
 }
 
 enum Platform {
