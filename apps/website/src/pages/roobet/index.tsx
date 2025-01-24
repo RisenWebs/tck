@@ -118,9 +118,9 @@ function Roobet() {
             </JaggedBackgroundItem>
           </div>
 
-          <div className="">
-            <p className="text-4xl sm:text-6xl md:text-8xl font-bold mt-4">VIP Rewards</p>
-            <p className="text-base sm:text-lg md:text-xl text-gray-500 text-center mt-4">
+          <div className="text-center">
+            <p className="text-4xl md:text-6xl font-bold mt-4">VIP Rewards</p>
+            <p className="text-base sm:text-lg md:text-lg text-gray-500 text-center mt-4">
               This reward is available for 7 Days upon redemption.
             </p>
           </div>
@@ -157,7 +157,7 @@ function Roobet() {
           </div>
         </div>
 
-        <div className="relative flex flex-row justify-between items-center mt-5 max-w-[1200px] mx-auto px-4 w-[90%]">
+        <div className="relative mt-20 flex flex-row justify-between items-center  max-w-[1200px] mx-auto px-4 w-[90%]">
           <div className="flex items-center w-[100%]">
             <svg
               className="w-[48px] h-[31px] sm:w-[60px] sm:h-[40px] lg:w-[70px] lg:h-[50px] relative z-0"
@@ -214,12 +214,12 @@ function Roobet() {
           </div>
         </div>
 
-        <div className="relative bg-[#161625E5] w-[87.5%] border-2 border-transparent overflow-hidden rounded-lg flex justify-between h-[13vh]">
+        <div className="relative  bg-[#161625E5]  w-full md:w-[87.5%] border-2 border-transparent overflow-hidden rounded-lg md:flex justify-between md:h-[13vh]">
           <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-[#ddb43f] to-[#9b7c25] blur-[40px] top-[20px] rounded-[5rem] w-[35%]" style={{ background: "linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%)", filter: "blur(20px)", }}>
           </div>
           <div className='flex w-[100%] h-[100%] justify-between items-center'>
             <div className="flex flex-col items-baseline p-6 rounded-lg text-center">
-              <Image src={roobetLogo} alt='roobet logo' className='w-[6vw] mb-2'></Image>
+              <Image src={roobetLogo} alt='roobet logo' className='w-[130px] h-[35px] md:w-[6vw] mb-2'></Image>
               <div>
                 <h1 className="text-white text-xl font-bold text-left">$15 Reload & Instant Rakeback</h1>
                 <p className=" text-gray-400 text-sm text-left">
@@ -229,7 +229,7 @@ function Roobet() {
             </div>
           </div>
 
-          <div className='h-[100%] w-[35%] flex items-center justify-center mr-8 gap-4'>
+          <div className='h-[100%] md:w-[35%] flex items-center md:justify-center px-5 mr-8 gap-4'>
             <JaggedBackgroundItem fullWidth={false} fill="#52431d">
               <div className='flex w-[11vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
                 <span className='w-full text-white inline-block text-left font-bold'>
@@ -401,8 +401,8 @@ function Roobet() {
           </div>
         </div>
 
-        <div className='relative overflow-hidden flex flex-row justify-between items-center mt-10 max-w-[1200px] px-4 w-[92%] gap-5 left-2'>
-          <div className='w-[50%] h-[50vh] bg-[#161625E5] rounded-lg flex flex-col justify-center items-center gap-[3%]'>
+        <div className='relative overflow-hidden  md:flex flex-row justify-between items-center mt-10 max-w-[1200px] px-4 w-[92%] gap-5 left-2'>
+          <div className='md:w-[50%] md:mb-0 mb-10 h-[50vh] bg-[#161625E5] rounded-lg flex flex-col justify-center items-center gap-[3%]'>
             <div className='h-[50%] w-[100%]'>
               <svg className='h-[150%] w-[100%]' style={{ aspectRatio: "xMidYMid meet" }} viewBox="0 0 619 550" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_2973_2987" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="619" height="550">
@@ -514,7 +514,7 @@ function Roobet() {
             </div>
           </div>
 
-          <div className='w-[50%] h-[50vh] bg-[#161625E5] rounded-lg' style={{
+          <div className='md:w-[50%] h-[50vh] bg-[#161625E5] rounded-lg' style={{
             borderRadius: "0.5rem",
             border: "2px solid transparent",
             background: `
@@ -571,9 +571,9 @@ function Roobet() {
 
             <div className='flex flex-col items-baseline gap-2'>
               <div className="flex flex-col items-baseline gap-2">
-                <div>
+                <div className="mt-14">
                   <h1 className="text-white text-3xl md:text-4xl font-bold">Visit Roobet<span className='text-[#989EAE]'>.com  </span></h1>
-                  <p className="text-[#989EAE] text-sm md:text-base">
+                  <p className="text-[#989EAE] py-1 text-sm md:text-base">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   </p>
                 </div>
@@ -581,7 +581,7 @@ function Roobet() {
 
               <div className="flex items-center flex-col justify-start gap-3">
                 <JaggedBackgroundItem fullWidth={false} fill="#161623">
-                  <div className='flex w-[8vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
+                  <div className='flex w-[200px] md:w-[8vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
                     <span className='w-full text-white inline-block text-left font-bold'>
                       {code}
                     </span>
@@ -640,14 +640,14 @@ function Roobet() {
           <div className="relative flex flex-col items-center justify-center text-white overflow-hidden">
 
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-12 left-16 w-24 h-24 bg-indigo-600 opacity-20 rotate-45 transform -z-10" />
+              <div className="absolute top-16 left-16 w-24 h-24 bg-indigo-600 opacity-20 rotate-45 transform -z-10" />
               <div className="absolute bottom-24 right-20 w-36 h-36 bg-indigo-600 opacity-10 rotate-45 transform -z-10" />
               <div className="absolute top-1/3 left-1/3 w-28 h-28 bg-indigo-600 opacity-5 rotate-45 transform -z-10" />
             </div>
 
             <div className="relative z-10 p-8 rounded-lg text-center">
               <div className="flex flex-col items-center justify-center text-white">
-                <h1 className="text-4xl font-bold">High Roller Rewards</h1>
+                <h1 className="text-4xl font-bold mt-24">High Roller Rewards</h1>
                 <p className="mt-4 text-lg text-center">
                   Are you a High Roller? Make a ticket in our Discord and learn about our Exclusive VIP Rewards.
                 </p>
@@ -661,7 +661,7 @@ function Roobet() {
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 32 32"
-                    className="w-5 h-5" 
+                    className="w-5 h-5"
                     fill="currentColor"
                   >
                     <path d="M20.992 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.050 0.005 0.109 0.005 0.168 0 1.523-1.191 2.768-2.693 2.854l-0.008 0zM11.026 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.048 0.005 0.104 0.005 0.161 0 1.525-1.19 2.771-2.692 2.862l-0.008 0zM26.393 6.465c-1.763-0.832-3.811-1.49-5.955-1.871l-0.149-0.022c-0.005-0.001-0.011-0.002-0.017-0.002-0.035 0-0.065 0.019-0.081 0.047l-0 0c-0.234 0.411-0.488 0.924-0.717 1.45l-0.043 0.111c-1.030-0.165-2.218-0.259-3.428-0.259s-2.398 0.094-3.557 0.275l0.129-0.017c-0.27-0.63-0.528-1.142-0.813-1.638l0.041 0.077c-0.017-0.029-0.048-0.047-0.083-0.047-0.005 0-0.011 0-0.016 0.001l0.001-0c-2.293 0.403-4.342 1.060-6.256 1.957l0.151-0.064c-0.017 0.007-0.031 0.019-0.040 0.034l-0 0c-2.854 4.041-4.562 9.069-4.562 14.496 0 0.907 0.048 1.802 0.141 2.684l-0.009-0.11c0.003 0.029 0.018 0.053 0.039 0.070l0 0c2.14 1.601 4.628 2.891 7.313 3.738l0.176 0.048c0.008 0.003 0.018 0.004 0.028 0.004 0.032 0 0.060-0.015 0.077-0.038l0-0c0.535-0.72 1.044-1.536 1.485-2.392l0.047-0.1c0.006-0.012 0.010-0.027 0.010-0.043 0-0.041-0.026-0.075-0.062-0.089l-0.001-0c-0.912-0.352-1.683-0.727-2.417-1.157l0.077 0.042c-0.029-0.017-0.048-0.048-0.048-0.083 0-0.031 0.015-0.059 0.038-0.076l0-0c0.157-0.118 0.315-0.24 0.465-0.364 0.016-0.013 0.037-0.021 0.059-0.021 0.014 0 0.027 0.003 0.038 0.008l-0.001-0c2.208 1.061 4.8 1.681 7.536 1.681s5.329-0.62 7.643-1.727l-0.107 0.046c0.012-0.006 0.025-0.009 0.040-0.009 0.022 0 0.043 0.008 0.059 0.021l-0-0c0.15 0.124 0.307 0.248 0.466 0.365 0.023 0.018 0.038 0.046 0.038 0.077 0 0.035-0.019 0.065-0.046 0.082l-0 0c-0.661 0.395-1.432 0.769-2.235 1.078l-0.105 0.036c-0.036 0.014-0.062 0.049-0.062 0.089 0 0.016 0.004 0.031 0.011 0.044l-0-0.001c0.501 0.96 1.009 1.775 1.571 2.548l-0.040-0.057c0.017 0.024 0.046 0.040 0.077 0.040 0.010 0 0.020-0.002 0.029-0.004l-0.001 0c2.865-0.892 5.358-2.182 7.566-3.832l-0.065 0.047c0.022-0.016 0.036-0.041 0.039-0.069l0-0c0.087-0.784 0.136-1.694 0.136-2.615 0-5.415-1.712-10.43-4.623-14.534l0.052 0.078c-0.008-0.016-0.022-0.029-0.038-0.036l-0-0z"></path>
