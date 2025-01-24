@@ -16,6 +16,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await NextCors(req, res, { methods: ['PUT'], origin: '*', optionsSuccessStatus: 200 });
 
   const authorization = req.headers.authorization as string;
+  if (!authorization) return res.status(401).json({ error: `Missing valid authorization` });
+  
   const user = await getUserByAuthorization(authorization);
 
   if (!user) return res.status(401).end();

@@ -27,6 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(401).end();
     return;
   }
+  
   if (!user.permissions.includes('MANAGE_GIVEAWAYS')) {
     res.status(403).end();
     return;

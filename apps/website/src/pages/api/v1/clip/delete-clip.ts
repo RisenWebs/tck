@@ -7,7 +7,10 @@ export const config = { api: { bodyParser: { sizeLimit: '1mb' } } };
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await NextCors(req, res, { methods: ['DELETE'], origin: '*', optionsSuccessStatus: 200 });
 
-  const user = await getUserByAuthorization(req.headers.authorization as string);
+  const authorization = req.headers.authorization as string;
+  if (!authorization) return res.status(401).json({ error: `Missing valid authorization` });
+  
+  const user = await getUserByAuthorization(authorization);
   if (!user || !user.permissions.includes('MANAGE_CLIPS')) return res.status(user ? 403 : 401).end();
 
   const clipId = req.query.clipId;
