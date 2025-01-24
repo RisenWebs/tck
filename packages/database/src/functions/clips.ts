@@ -4,7 +4,7 @@ import { socket } from '../socket';
 type Clip = {
     id: string;
     title: string;
-    platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM';
+    platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM' | 'KICK';
     videoClip: string;
     authorUser: string;
     authorPfp: string;
@@ -21,7 +21,7 @@ export const getAllClips = async (): Promise<Clip[]> => {
     });
 };
 
-export const createClip = async (title: string, platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM', videoClip: string, authorUser: string, authorPfp: string): Promise<Clip> => {
+export const createClip = async (title: string, platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM' | 'KICK', videoClip: string, authorUser: string, authorPfp: string): Promise<Clip> => {
     const clip = await prisma.clip.create({
         data: { title, platform, videoClip, authorUser, authorPfp },
     });
@@ -30,7 +30,7 @@ export const createClip = async (title: string, platform: 'YOUTUBE' | 'TIKTOK' |
     return clip;
 };
 
-export const updateClip = async (id: string, title: string, platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM', videoClip: string, authorUser: string, authorPfp: string): Promise<boolean> => {
+export const updateClip = async (id: string, title: string, platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM' | 'KICK', videoClip: string, authorUser: string, authorPfp: string): Promise<boolean> => {
     const clip = await prisma.clip.findUnique({ where: { id } });
     if (!clip) return false;
 
