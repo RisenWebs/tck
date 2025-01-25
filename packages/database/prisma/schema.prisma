@@ -96,7 +96,7 @@ model Clip {
 model UserAction {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @db.ObjectId
+  userId String @db.ObjectId
 
   action      Action
   ip          String?
@@ -175,6 +175,9 @@ model User {
 
   giveawayEntries GiveawayEntry[]
   giveawayWins    Giveaway[]
+
+  raffleEntries RaffleEntry[] @relation("UserToRaffleEntries")
+  raffleWins    RaffleWinner[]
 
   accountVerification AccountVerification?
 
@@ -281,4 +284,35 @@ model KickRaffle {
   creatorId String @db.ObjectId
 
   timestamp Int
+}
+
+model RaffleEntry {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  timestamp  Int
+  slot       Int
+  raffle     Raffle  @relation("RaffleToEntries", fields: [raffleId], references: [id])
+  raffleId   String  @db.ObjectId
+  user       User    @relation("UserToRaffleEntries", fields: [userId], references: [id], onDelete: NoAction)
+  userId     String  @db.ObjectId
+}
+
+model RaffleWinner {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  raffle   Raffle @relation(fields: [raffleId], references: [id])
+  raffleId String  @db.ObjectId
+  user     User    @relation(fields: [userId], references: [id])
+  userId   String  @db.ObjectId
+}
+
+model Raffle {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  value             Float
+  maxEntries        Int
+  maxWinners        Int             // Added field for maximum winners
+  image             String
+  entries           RaffleEntry[]   @relation("RaffleToEntries")
+  timestampCreation Int
+  timestampEnd      Int
+  winners           RaffleWinner[]  // Changed from single winner to multiple winners
 }

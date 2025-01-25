@@ -313,40 +313,63 @@ export async function createGiveaway(
   userId: string,
   ip: string
 ) {
-  const giveaway = await prisma.giveaway.create({
-    data: {
-      name,
-      brand,
-      value,
-      maxEntries,
-      timestampCreation: Date.now(),
-      timestampEnd,
-      image
-    }
+  console.log('Creating giveaway with the following details:', {
+    name,
+    brand,
+    value,
+    maxEntries,
+    timestampEnd,
+    image,
+    userId,
+    ip
   });
 
-  // Create action.
-  await prisma.userAction.create({
-    data: {
-      user: {
-        connect: {
-          id: userId
-        }
-      },
-      action: Action.GIVEAWAY_CREATE,
-      ip,
-      timestamp: Date.now(),
-      description: `Giveaway ${giveaway.id}`
-    }
-  });
+  try {
+    const giveaway = await prisma.giveaway.create({
+      data: {
+        name,
+        brand,
+        value,
+        maxEntries,
+        timestampCreation: Date.now(),
+        timestampEnd,
+        image
+      }
+    });
 
-  // Send Discord notification.
-  socket.emit('newGiveaway', giveaway);
+    console.log('Giveaway created successfully:', giveaway);
 
-  const timeout = timestampEnd - Date.now();
-  setTimeout(async () => {
-    await endGiveaway(giveaway.id);
-  }, timeout);
+    // Create action.
+    await prisma.userAction.create({
+      data: {
+        user: {
+          connect: {
+            id: userId
+          }
+        },
+        action: Action.GIVEAWAY_CREATE,
+        ip,
+        timestamp: Date.now(),
+        description: `Giveaway ${giveaway.id}`
+      }
+    });
+
+    console.log('User action created successfully for giveaway:', giveaway.id);
+
+    // Send Discord notification.
+    socket.emit('newGiveaway', giveaway);
+    console.log('Discord notification sent for giveaway:', giveaway.id);
+
+    const timeout = timestampEnd - Date.now();
+    setTimeout(async () => {
+      console.log('Ending giveaway:', giveaway.id);
+      await endGiveaway(giveaway.id);
+    }, timeout);
+
+    console.log('Set timeout to end giveaway in', timeout, 'milliseconds');
+  } catch (error) {
+    console.error('Error creating giveaway:', error);
+  }
 }
 
 export async function enterGiveaway(user: User, giveawayId: string, ip: string): Promise<boolean> {
