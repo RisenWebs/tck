@@ -18,72 +18,89 @@ type RewardProps = {
   canClaim: boolean;
 };
 
-const rankToImageName = (rank: string) => `${rank.split(' ')[0].toLowerCase()}_${{ I: "1", II: "2", III: "3", IV: "4" }[rank.split(' ')[1]] || "1"}`;
+const rankToImageName = (rank: string) => {
+  return `${rank.split(' ')[0].toLowerCase()}_${
+    { I: '1', II: '2', III: '3', IV: '4' }[rank.split(' ')[1]] || '1'
+  }`;
+};
 const rewards: Record<string, RewardProps[]> = {
   silver: [
-    { tier: "SILVER I", wager: "$5,000", reward: "5.00", claimed: false, canClaim: true },
-    { tier: "SILVER II", wager: "$10,000", reward: "10.00", claimed: false, canClaim: false },
-    { tier: "SILVER III", wager: "$25,000", reward: "20.00", claimed: false, canClaim: false },
-    { tier: "SILVER IV", wager: "$50,000", reward: "25.00", claimed: false, canClaim: false },
+    { tier: 'SILVER I', wager: '$5,000', reward: '5.00', claimed: false, canClaim: true },
+    { tier: 'SILVER II', wager: '$10,000', reward: '10.00', claimed: false, canClaim: false },
+    { tier: 'SILVER III', wager: '$25,000', reward: '20.00', claimed: false, canClaim: false },
+    { tier: 'SILVER IV', wager: '$50,000', reward: '25.00', claimed: false, canClaim: false }
   ],
   gold: [
-    { tier: "GOLD I", wager: "$75,000", reward: "30.00", claimed: false, canClaim: false },
-    { tier: "GOLD II", wager: "$100,000", reward: "40.00", claimed: false, canClaim: false },
-    { tier: "GOLD III", wager: "$150,000", reward: "50.00", claimed: false, canClaim: false },
-    { tier: "GOLD IV", wager: "$200,000", reward: "60.00", claimed: false, canClaim: false },
+    { tier: 'GOLD I', wager: '$75,000', reward: '30.00', claimed: false, canClaim: false },
+    { tier: 'GOLD II', wager: '$100,000', reward: '40.00', claimed: false, canClaim: false },
+    { tier: 'GOLD III', wager: '$150,000', reward: '50.00', claimed: false, canClaim: false },
+    { tier: 'GOLD IV', wager: '$200,000', reward: '60.00', claimed: false, canClaim: false }
   ],
   diamond: [
-    { tier: "DIAMOND I", wager: "$250,000", reward: "70.00", claimed: false, canClaim: false },
-    { tier: "DIAMOND II", wager: "$500,000", reward: "100.00", claimed: false, canClaim: false },
-    { tier: "DIAMOND III", wager: "$1,000,000", reward: "150.00", claimed: false, canClaim: false },
-  ],
+    { tier: 'DIAMOND I', wager: '$250,000', reward: '70.00', claimed: false, canClaim: false },
+    { tier: 'DIAMOND II', wager: '$500,000', reward: '100.00', claimed: false, canClaim: false },
+    { tier: 'DIAMOND III', wager: '$1,000,000', reward: '150.00', claimed: false, canClaim: false }
+  ]
 };
 
 function Roobet() {
   const theme = useTheme();
-  const [code] = useState("TCK");
-  const [rank, setRank] = useState("Silver I");
-  const [rankPath, setRankPath] = useState("");
-  const [tier, setTier] = useState("silver");
+  const [code] = useState('TCK');
+  const [rank, setRank] = useState('Silver I');
+  const [rankPath, setRankPath] = useState('');
+  const [tier, setTier] = useState('silver');
   const [progress, setProgress] = useState(10);
   const [remaining, setRemaining] = useState(8000);
   const [amountWagered, setAmountWagered] = useState(0);
   const tierKeys = Object.keys(rewards);
   let currentIndex = tierKeys.indexOf(tier);
 
-  const handleNavigation = (direction: "up" | "down") => {
+  const handleNavigation = (direction: 'up' | 'down') => {
     currentIndex = tierKeys.indexOf(tier);
-    if (direction === "up" && currentIndex > 0)
+    if (direction === 'up' && currentIndex > 0) {
       setTier(tierKeys[currentIndex - 1]);
-    else if (direction === "down" && currentIndex < tierKeys.length - 1)
+    } else if (direction === 'down' && currentIndex < tierKeys.length - 1) {
       setTier(tierKeys[currentIndex + 1]);
+    }
   };
 
   const RewardCard: React.FC<RewardProps> = ({ tier, wager, reward, claimed, canClaim }) => {
     return (
-      <div className="flex items-center justify-between bg-[#202032] p-4 rounded-lg shadow-md">
-        <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-[#03030A54] rounded-lg flex items-center justify-center">
-            <Image src={`/img/roobeticons/${rankToImageName(tier)}.png`} className='w-[60%]' unoptimized width={100} height={100} alt='roobet rank image'></Image>
+      <div className='flex items-center justify-between bg-[#202032] p-4 rounded-lg shadow-md'>
+        <div className='flex items-center space-x-4'>
+          <div className='w-10 h-10 bg-[#03030A54] rounded-lg flex items-center justify-center'>
+            <Image
+              src={`/img/roobeticons/${rankToImageName(tier)}.png`}
+              className='w-[60%]'
+              unoptimized
+              width={100}
+              height={100}
+              alt='roobet rank image'
+            ></Image>
           </div>
           <div>
-            <h3 className="text-lg font-extrabold italic text-white">{tier}</h3>
-            <p className="text-sm text-gray-400">Wager {wager}</p>
+            <h3 className='text-lg font-extrabold italic text-white'>{tier}</h3>
+            <p className='text-sm text-gray-400'>Wager {wager}</p>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <p className="text-lg font-bold text-gray-200">${reward}</p>
+        <div className='flex items-center space-x-4'>
+          <p className='text-sm md:text-lg font-bold text-gray-200'>${reward}</p>
           {claimed ? (
             <button
-              className="px-4 py-2 bg-gray-600 text-gray-400 rounded-lg cursor-not-allowed"
+              className='px-4 py-2 bg-gray-600 text-gray-400 rounded-lg cursor-not-allowed'
               disabled
             >
               Claimed
             </button>
           ) : (
-            <button className={clsx("px-4 py-2 text-white font-bold rounded-lg", canClaim
-              ? 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] hover:from-[#DDAA3F] hover:to-[#9A6A25]'
-              : 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] opacity-40 shadow-inner')}>
+            <button
+              className={clsx(
+                'px-4 py-2 text-white font-bold rounded-lg',
+                canClaim
+                  ? 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] hover:from-[#DDAA3F] hover:to-[#9A6A25]'
+                  : 'bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] opacity-40 shadow-inner'
+              )}
+            >
               Claim
             </button>
           )}
@@ -98,459 +115,574 @@ function Roobet() {
 
   useEffect(() => {
     setRankPath(`/img/roobethd/${rankToImageName(rank)}.png`);
-  }, [rank])
+  }, [rank]);
 
   useEffect(() => {
     theme.setTheme('roobet');
   }, []);
 
   return (
-    <Layout title="Roobet">
-      <div className="flex flex-col items-center justify-start min-h-screen mt-[6%]">
+    <Layout title='Roobet'>
+      <div className='flex px-2 flex-col items-center justify-start min-h-screen mt-[6%]'>
         <div>
-          <div className="flex justify-center items-center mt-4">
-            <JaggedBackgroundItem fullWidth={false} fill="#52431d">
+          <div className='flex justify-center items-center mt-4'>
+            <JaggedBackgroundItem fullWidth={false} fill='#52431d'>
               <Image
-                className="w-[130px] sm:w-[100px] md:w-[130px] h-[35px] sm:h-[30px] md:h-[35px]"
+                className='w-[100px] sm:w-[100px]  h-[35px] sm:h-[30px] md:h-[26px]'
                 src={roobetLogo}
-                alt="Roobet"
+                alt='Roobet'
               />
             </JaggedBackgroundItem>
           </div>
 
-          <div className="text-center">
-            <p className="text-4xl md:text-6xl font-bold mt-4">VIP Rewards</p>
-            <p className="text-base sm:text-lg md:text-lg text-gray-500 text-center mt-4">
+          <div className='text-center'>
+            <p className='text-5xl md:text-[67px] font-bold mt-10'>VIP Rewards</p>
+            <p className='text-base sm:text-lg md:text-[14px] text-gray-500 text-center md:mt-7'>
               This reward is available for 7 Days upon redemption.
             </p>
           </div>
 
-          <div className="select-none">
-            <div className="absolute top-[10%] left-[30%] hidden md:block">
-              <Image
-                className="w-[35px] h-[35px] -rotate-12"
-                src={roobetIcon}
-                alt="Roobet"
-              />
+          <div className='select-none'>
+            <div className='absolute top-[10%] left-[30%] hidden md:block'>
+              <Image className='w-[35px] h-[35px] -rotate-12' src={roobetIcon} alt='Roobet' />
             </div>
-            <div className="absolute top-[23%] right-[28%] hidden md:block">
-              <Image
-                className="w-[35px] h-[35px] rotate-12"
-                src={roobetIcon}
-                alt="Roobet"
-              />
+            <div className='absolute top-[23%] right-[28%] hidden md:block'>
+              <Image className='w-[35px] h-[35px] rotate-12' src={roobetIcon} alt='Roobet' />
             </div>
-            <div className="absolute top-[22%] left-[27%] opacity-20 hidden md:block">
-              <Image
-                className="w-[20px] h-[20px] -rotate-12"
-                src={roobetIcon}
-                alt="Roobet"
-              />
+            <div className='absolute top-[22%] left-[27%] opacity-20 hidden md:block'>
+              <Image className='w-[20px] h-[20px] -rotate-12' src={roobetIcon} alt='Roobet' />
             </div>
-            <div className="absolute top-[15%] right-[30%] opacity-20 hidden md:block">
-              <Image
-                className="w-[20px] h-[20px]"
-                src={roobetIcon}
-                alt="Roobet"
-              />
+            <div className='absolute top-[15%] right-[30%] opacity-20 hidden md:block'>
+              <Image className='w-[20px] h-[20px]' src={roobetIcon} alt='Roobet' />
             </div>
           </div>
         </div>
 
-        <div className="relative mt-20 flex flex-row justify-between items-center  max-w-[1200px] mx-auto px-4 w-[90%]">
-          <div className="flex items-center w-[100%]">
+        <div className='mt-[100px] w-full max-w-[1200px]'>
+          <div className='flex items-center relative'>
             <svg
-              className="w-[48px] h-[31px] sm:w-[60px] sm:h-[40px] lg:w-[70px] lg:h-[50px] relative z-0"
-              viewBox="0 0 48 31"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              className='absolute'
+              width='68'
+              height='51'
+              viewBox='0 0 48 31'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
             >
-              <g filter="url(#filter0_d_2971_1709)">
+              <g filter='url(#filter0_d_0_1)'>
                 <path
-                  d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                  fill="url(#paint0_linear_2971_1709)"
-                  fillOpacity="0.75"
-                  shapeRendering="crispEdges"
+                  d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                  fill='url(#paint0_linear_0_1)'
+                  fill-opacity='0.75'
+                  shape-rendering='crispEdges'
                 />
                 <path
-                  d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                  fill="url(#paint1_linear_2971_1709)"
-                  fillOpacity="0.15"
-                  shapeRendering="crispEdges"
+                  d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                  fill='url(#paint1_linear_0_1)'
+                  fill-opacity='0.15'
+                  shape-rendering='crispEdges'
                 />
               </g>
+              <path
+                d='M21.148 20.6522L22.0849 20.3801C22.2065 20.3452 22.3199 20.2851 22.4183 20.2035C22.5166 20.1219 22.5977 20.0204 22.6567 19.9054C22.7157 19.7904 22.7513 19.6641 22.7613 19.5344C22.7714 19.4047 22.7557 19.2743 22.7152 19.151C22.6215 18.8614 22.5278 18.5717 22.4256 18.2732C22.9083 18.3268 23.3963 18.2525 23.8435 18.0574C24.2906 17.8623 24.682 17.5528 24.9807 17.1583C25.3566 16.6961 25.7667 16.2647 26.2071 15.8678C26.6581 15.3858 26.9553 14.7731 27.0588 14.1121C27.0833 14.0142 27.0829 13.9115 27.0577 13.8138C27.0324 13.7161 26.9832 13.6268 26.9147 13.5544C26.8463 13.4821 26.7609 13.4292 26.6668 13.4007C26.5726 13.3723 26.473 13.3694 26.3775 13.3922C26.2077 13.4115 26.0363 13.4115 25.8665 13.3922C25.1486 13.3266 24.4417 13.1673 23.7628 12.9182C23.6299 12.8691 23.5162 12.7766 23.4391 12.6548C23.4391 12.6197 23.4391 12.6197 23.4391 12.5846C23.1736 11.8913 22.6577 11.3312 21.9997 11.022C21.7612 10.8639 21.6591 10.7674 21.6761 10.4777C21.6801 10.4222 21.6801 10.3664 21.6761 10.3109C21.6803 10.2554 21.6803 10.1996 21.6761 10.1441C21.6761 10.1441 21.6761 10.0826 21.6761 10.0475V9.56469C21.6768 8.98745 21.5515 8.41743 21.3099 7.89674L21.2077 7.7036V7.65093C21.2107 7.62763 21.2107 7.60401 21.2077 7.5807L21.1395 7.4578V7.39635L20.9351 7.24711L20.8755 7.1681L20.8244 7.09788L20.7307 7.01009L20.654 6.93986L20.5518 6.86963H20.4326C20.3958 6.86556 20.3587 6.86556 20.3219 6.86963H20.1941C19.879 6.86963 19.5127 7.54558 19.3424 7.9933C19.3424 8.04597 19.3424 8.09865 19.2828 8.1601C19.2864 8.20684 19.2864 8.25381 19.2828 8.30056C19.1976 8.58147 19.1125 8.8624 19.0443 9.17843V9.24866L18.9762 9.50324C18.9791 9.56173 18.9791 9.62033 18.9762 9.67881C18.9762 9.77538 18.9762 9.86317 18.9166 9.95095C18.9166 10.0387 18.9166 10.1177 18.8569 10.2055C18.7973 10.2933 18.7888 10.5567 18.7462 10.741V11.0307H18.4652L18.3033 10.9517H18.1841L18.0733 10.8903H18.0308L17.8945 10.8113L17.7668 10.7498L17.6305 10.6796L17.0002 10.7586L16.6084 10.6006H16.5488L16.4296 10.5567H15.5779C15.3274 10.5022 15.0744 10.4612 14.8199 10.4338H13.4656C13.159 10.4338 12.8524 10.4338 12.5373 10.4338C12.0177 10.4777 11.907 10.7235 12.0688 11.2502L12.1199 11.3731V11.5926L12.171 11.6979V11.8033L12.2222 11.8911L12.2733 11.9701V12.0227L12.3244 12.093L12.3755 12.1456V12.1895L12.418 12.2334C12.4391 12.2462 12.4567 12.2644 12.4691 12.2861L12.5202 12.3388L12.5969 12.4002C13.085 12.8343 13.6705 13.1361 14.3003 13.2781C14.7262 13.3834 15.152 13.4624 15.6205 13.5415L16.0463 13.6204C15.9697 14.0067 15.893 14.3579 15.8249 14.7178C15.7314 15.0192 15.7026 15.3379 15.7403 15.6519C15.7781 15.9659 15.8815 16.2677 16.0435 16.5365C16.2054 16.8053 16.4221 17.0346 16.6784 17.2086C16.9348 17.3827 17.2248 17.4973 17.5283 17.5446C17.9505 17.6103 18.3465 17.7964 18.6715 18.0819C18.9966 18.3672 19.2378 18.7406 19.368 19.1598L19.632 20.0377C19.6554 20.2066 19.7219 20.366 19.8246 20.4999C19.9272 20.6337 20.0625 20.7372 20.2165 20.7996C20.3706 20.862 20.538 20.8813 20.7016 20.8554C20.8652 20.8295 21.0192 20.7594 21.148 20.6522Z'
+                fill='#DDB440'
+              />
               <defs>
-                <filter id="filter0_d_2971_1709" x="0.140625" y="0" width="47.834" height="30.9575" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                  <feOffset dy="1" />
-                  <feComposite in2="hardAlpha" operator="out" />
-                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0" />
-                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2971_1709" />
-                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2971_1709" result="shape" />
+                <filter
+                  id='filter0_d_0_1'
+                  x='0.140625'
+                  y='0'
+                  width='47.834'
+                  height='30.9575'
+                  filterUnits='userSpaceOnUse'
+                  color-interpolation-filters='sRGB'
+                >
+                  <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                  <feColorMatrix
+                    in='SourceAlpha'
+                    type='matrix'
+                    values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                    result='hardAlpha'
+                  />
+                  <feOffset dy='1' />
+                  <feComposite in2='hardAlpha' operator='out' />
+                  <feColorMatrix
+                    type='matrix'
+                    values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0'
+                  />
+                  <feBlend mode='normal' in2='BackgroundImageFix' result='effect1_dropShadow_0_1' />
+                  <feBlend
+                    mode='normal'
+                    in='SourceGraphic'
+                    in2='effect1_dropShadow_0_1'
+                    result='shape'
+                  />
                 </filter>
-                <linearGradient id="paint0_linear_2971_1709" x1="24" y1="0" x2="24" y2="30" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#26263A" />
-                  <stop offset="1" stop-color="#11111F" />
+                <linearGradient
+                  id='paint0_linear_0_1'
+                  x1='24'
+                  y1='0'
+                  x2='24'
+                  y2='30'
+                  gradientUnits='userSpaceOnUse'
+                >
+                  <stop stop-color='#26263A' />
+                  <stop offset='1' stop-color='#11111F' />
                 </linearGradient>
-                <linearGradient id="paint1_linear_2971_1709" x1="60" y1="15" x2="-10.5" y2="15" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#DDB440" stop-opacity="0" />
-                  <stop offset="1" stop-color="#DDB440" />
+                <linearGradient
+                  id='paint1_linear_0_1'
+                  x1='60'
+                  y1='15'
+                  x2='-10.5'
+                  y2='15'
+                  gradientUnits='userSpaceOnUse'
+                >
+                  <stop stop-color='#DDB440' stop-opacity='0' />
+                  <stop offset='1' stop-color='#DDB440' />
                 </linearGradient>
               </defs>
-
             </svg>
 
-            <div className="absolute top-[8px] font-serif font-extrabold left-[3%] flex items-center z-10 gap-[2px]">
-              <Image
-                src={roobetIcon}
-                alt="roobet icon"
-                className="sm:w-[15px] sm:h-[15px] lg:w-[19px] lg:h-[20px] select-none"
-              />
-              <span className="ml-2 text-white font-extrabold italic text-sm sm:text-base lg:text-lg" style={{ fontFamily: 'Archivo, sans-serif' }}>
-                SIGN UP REWARD
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative  bg-[#161625E5]  w-full md:w-[87.5%] border-2 border-transparent overflow-hidden rounded-lg md:flex justify-between md:h-[13vh]">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-[#ddb43f] to-[#9b7c25] blur-[40px] top-[20px] rounded-[5rem] w-[35%]" style={{ background: "linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%)", filter: "blur(20px)", }}>
-          </div>
-          <div className='flex w-[100%] h-[100%] justify-between items-center'>
-            <div className="flex flex-col items-baseline p-6 rounded-lg text-center">
-              <Image src={roobetLogo} alt='roobet logo' className='w-[130px] h-[35px] md:w-[6vw] mb-2'></Image>
-              <div>
-                <h1 className="text-white text-xl font-bold text-left">$15 Reload & Instant Rakeback</h1>
-                <p className=" text-gray-400 text-sm text-left">
-                  Click on the button below to register instantly.
-                </p>
-              </div>
-            </div>
+            <h1 className='italic ml-12 mb-1 relative font-bold text-[20px]'>SIGN UP REWARD</h1>
           </div>
 
-          <div className='h-[100%] md:w-[35%] flex items-center md:justify-center px-5 mr-8 gap-4'>
-            <JaggedBackgroundItem fullWidth={false} fill="#52431d">
-              <div className='flex w-[11vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
-                <span className='w-full text-white inline-block text-left font-bold'>
-                  {code}
-                </span>
+          <div className='w-full mt-6 flex flex-wrap gap-5 md:gap-0 relative justify-between items-center rounded-[8px] border border-[#25253A] bg-[#161625E5] px-9 py-7'>
+            <div>
+              <Image className='w-[105px] h-[27px]' src={roobetLogo} alt='Roobet' />
 
-                <div className="aspect-square w-[3vh] bg-[#989EAE54] rounded-full flex items-center justify-center sm:w-[4vh]">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 6 7"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M0.742191 2.53506H3.48647C3.89466 2.53506 4.22866 2.84828 4.22866 3.23097V5.8041C4.22866 6.18683 3.89461 6.5 3.48647 6.5H0.742191C0.334001 6.5 0 6.18678 0 5.8041V3.23097C0 2.84823 0.334051 2.53506 0.742191 2.53506ZM2.51353 0.500058H5.25781C5.666 0.500058 6 0.813276 6 1.19596V3.76909C6 4.15183 5.66595 4.465 5.25781 4.465H4.54041V3.23091C4.54041 2.6875 4.06623 2.24289 3.48668 2.24289H1.77149V1.1959C1.77149 0.813171 2.10554 0.5 2.51368 0.5L2.51353 0.500058Z"
-                      fill="#989EAE"
-                    />
-                  </svg>
-                </div>
-
-              </div>
-            </JaggedBackgroundItem>
-
-            <button className="flex items-center justify-center bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] text-white py-2 px-4 sm:px-6 w-[150px] sm:w-[200px] h-10 rounded-lg cursor-pointer">
-              <span className="text-[14px] sm:text-[16px] font-semibold text-nowrap">Claim Reward</span>
-              <span className="ml-2">
-                <svg
-                  width="12"
-                  height="18"
-                  viewBox="0 0 9 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transition-all duration-200 ease-in-out"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M2.62792 10.3923C2.55824 10.4614 2.46502 10.5 2.36799 10.5C2.27095 10.5 2.17771 10.4614 2.10804 10.3923C2.07385 10.3583 2.04667 10.3176 2.02811 10.2727C2.00956 10.2278 2 10.1795 2 10.1307C2 10.0819 2.00956 10.0337 2.02811 9.98874C2.04667 9.94381 2.07385 9.90313 2.10804 9.86911L6.01976 5.93156L2.10923 2.13029C2.07517 2.09645 2.0481 2.05598 2.02961 2.01126C2.01112 1.96653 2.00158 1.91847 2.00158 1.86991C2.00158 1.82135 2.01112 1.77329 2.02961 1.72856C2.0481 1.68384 2.07517 1.64334 2.10923 1.6095C2.17834 1.53936 2.27179 1.5 2.36918 1.5C2.46656 1.5 2.56 1.53936 2.62911 1.6095L7 5.93156L2.62792 10.3923Z"
-                    fill="white"
-                    fillOpacity="0.75"
-                  />
-                </svg>
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div className='relative flex flex-row justify-between items-center mt-10 max-w-[1200px] px-4 w-[94%] left-2'>
-          <div className="relative flex flex-row justify-between items-center mt-10 max-w-[1200px] mx-auto px-4 w-[50%]">
-            <div className="flex items-center w-[100%]">
-              <svg
-                className="w-[48px] h-[31px] sm:w-[60px] sm:h-[40px] lg:w-[70px] lg:h-[50px] relative z-0"
-                viewBox="0 0 48 31"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g filter="url(#filter0_d_2971_1709)">
-                  <path
-                    d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                    fill="url(#paint0_linear_2971_1709)"
-                    fillOpacity="0.75"
-                    shapeRendering="crispEdges"
-                  />
-                  <path
-                    d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                    fill="url(#paint1_linear_2971_1709)"
-                    fillOpacity="0.15"
-                    shapeRendering="crispEdges"
-                  />
-                </g>
-                <defs>
-                  <filter id="filter0_d_2971_1709" x="0.140625" y="0" width="47.834" height="30.9575" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="1" />
-                    <feComposite in2="hardAlpha" operator="out" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2971_1709" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2971_1709" result="shape" />
-                  </filter>
-                  <linearGradient id="paint0_linear_2971_1709" x1="24" y1="0" x2="24" y2="30" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#26263A" />
-                    <stop offset="1" stop-color="#11111F" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear_2971_1709" x1="60" y1="15" x2="-10.5" y2="15" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#DDB440" stop-opacity="0" />
-                    <stop offset="1" stop-color="#DDB440" />
-                  </linearGradient>
-                </defs>
-
-              </svg>
-
-              <div className="absolute top-[8px] font-serif font-extrabold left-[6.8%] flex items-center z-10 gap-[2px]">
-                <svg width="19" height="20" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.99967 7.86654C8.61049 7.86654 9.91634 6.5607 9.91634 4.94987C9.91634 3.33904 8.61049 2.0332 6.99967 2.0332C5.38885 2.0332 4.08301 3.33904 4.08301 4.94987C4.08301 6.5607 5.38885 7.86654 6.99967 7.86654Z" fill="#DDB440" />
-                  <path d="M6.99979 9.32471C4.07727 9.32471 1.69727 11.2847 1.69727 13.6997C1.69727 13.863 1.8256 13.9914 1.98893 13.9914H12.0106C12.174 13.9914 12.3023 13.863 12.3023 13.6997C12.3023 11.2847 9.92229 9.32471 6.99979 9.32471Z" fill="#DDB440" />
-                </svg>
-                <span className="ml-2 text-white font-extrabold italic text-sm sm:text-base lg:text-lg" style={{ fontFamily: 'Archivo, sans-serif' }}>
-                  YOUR RANK
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative flex flex-row justify-between items-center mt-10 max-w-[1200px] mx-auto px-4 w-[50%]">
-            <div className="flex items-center w-[100%]">
-              <svg
-                className="w-[48px] h-[31px] sm:w-[60px] sm:h-[40px] lg:w-[70px] lg:h-[50px] relative z-0"
-                viewBox="0 0 48 31"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g filter="url(#filter0_d_2971_1709)">
-                  <path
-                    d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                    fill="url(#paint0_linear_2971_1709)"
-                    fillOpacity="0.75"
-                    shapeRendering="crispEdges"
-                  />
-                  <path
-                    d="M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z"
-                    fill="url(#paint1_linear_2971_1709)"
-                    fillOpacity="0.15"
-                    shapeRendering="crispEdges"
-                  />
-                </g>
-                <defs>
-                  <filter id="filter0_d_2971_1709" x="0.140625" y="0" width="47.834" height="30.9575" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="1" />
-                    <feComposite in2="hardAlpha" operator="out" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2971_1709" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2971_1709" result="shape" />
-                  </filter>
-                  <linearGradient id="paint0_linear_2971_1709" x1="24" y1="0" x2="24" y2="30" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#26263A" />
-                    <stop offset="1" stop-color="#11111F" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear_2971_1709" x1="60" y1="15" x2="-10.5" y2="15" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#DDB440" stop-opacity="0" />
-                    <stop offset="1" stop-color="#DDB440" />
-                  </linearGradient>
-                </defs>
-
-              </svg>
-
-              <div className="absolute top-[8px] font-serif font-extrabold left-[7%] flex items-center z-10 gap-[2px]">
-                <svg width="19" height="20" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5.86108 1.25036C5.76597 1.24842 5.67186 1.2701 5.58718 1.31344C5.50251 1.35679 5.4299 1.42046 5.37586 1.49874C5.32182 1.57703 5.28803 1.6675 5.27752 1.76204C5.26701 1.85659 5.28012 1.95226 5.31565 2.0405L5.81198 3.28172L5.0042 2.77618C4.8747 2.69531 4.71837 2.66919 4.56962 2.70357C4.42086 2.73796 4.29186 2.83002 4.21099 2.95952C4.13011 3.08902 4.10399 3.24534 4.13838 3.3941C4.17276 3.54285 4.26483 3.67186 4.39433 3.75273L4.99499 4.12786H1.82215C1.4408 4.12826 1.07518 4.27994 0.805524 4.54959C0.535867 4.81925 0.384195 5.18487 0.383789 5.56622V6.14157C0.383789 6.93477 1.02894 7.57993 1.82215 7.57993H12.1784C12.5597 7.57952 12.9253 7.42785 13.195 7.15819C13.4647 6.88854 13.6163 6.52292 13.6167 6.14157V5.56622C13.6163 5.18487 13.4647 4.81925 13.195 4.54959C12.9253 4.27994 12.5597 4.12826 12.1784 4.12786H9.00553L9.60619 3.75196C9.67373 3.71369 9.73282 3.66215 9.77992 3.60043C9.82701 3.53872 9.86113 3.46812 9.88021 3.39287C9.8993 3.31762 9.90296 3.23929 9.89098 3.16259C9.879 3.0859 9.85161 3.01242 9.81049 2.94658C9.76936 2.88074 9.71533 2.82391 9.65166 2.7795C9.58798 2.73509 9.51598 2.70403 9.43999 2.68818C9.36399 2.67233 9.28558 2.67203 9.20947 2.68728C9.13335 2.70254 9.06111 2.73304 8.99709 2.77695L8.18777 3.28325L8.68487 2.0405C8.74163 1.8988 8.73978 1.74035 8.67972 1.60001C8.61965 1.45967 8.5063 1.34894 8.36459 1.29217C8.22289 1.23541 8.06444 1.23726 7.9241 1.29733C7.78376 1.35739 7.67303 1.47074 7.61626 1.61245L7.00026 3.15361L6.38349 1.61168C6.34149 1.50682 6.26956 1.41665 6.17666 1.3524C6.08376 1.28814 5.97401 1.25266 5.86108 1.25036ZM1.24681 8.72985V12.1819C1.24681 13.4515 2.27936 14.4833 3.54819 14.4833H6.42491V8.72985H1.24681ZM7.5756 8.72985V14.4833H10.4523C11.7212 14.4833 12.7537 13.4515 12.7537 12.1819V8.72985H7.5756Z" fill="#DDB440" />
-                  <path d="M5.86108 1.25036C5.76597 1.24842 5.67186 1.2701 5.58718 1.31344C5.50251 1.35679 5.4299 1.42046 5.37586 1.49874C5.32182 1.57703 5.28803 1.6675 5.27752 1.76204C5.26701 1.85659 5.28012 1.95226 5.31565 2.0405L5.81198 3.28172L5.0042 2.77618C4.8747 2.69531 4.71837 2.66919 4.56962 2.70357C4.42086 2.73796 4.29186 2.83002 4.21099 2.95952C4.13011 3.08902 4.10399 3.24534 4.13838 3.3941C4.17276 3.54285 4.26483 3.67186 4.39433 3.75273L4.99499 4.12786H1.82215C1.4408 4.12826 1.07518 4.27994 0.805524 4.54959C0.535867 4.81925 0.384195 5.18487 0.383789 5.56622V6.14157C0.383789 6.93477 1.02894 7.57993 1.82215 7.57993H12.1784C12.5597 7.57952 12.9253 7.42785 13.195 7.15819C13.4647 6.88854 13.6163 6.52292 13.6167 6.14157V5.56622C13.6163 5.18487 13.4647 4.81925 13.195 4.54959C12.9253 4.27994 12.5597 4.12826 12.1784 4.12786H9.00553L9.60619 3.75196C9.67373 3.71369 9.73282 3.66215 9.77992 3.60043C9.82701 3.53872 9.86113 3.46812 9.88021 3.39287C9.8993 3.31762 9.90296 3.23929 9.89098 3.16259C9.879 3.0859 9.85161 3.01242 9.81049 2.94658C9.76936 2.88074 9.71533 2.82391 9.65166 2.7795C9.58798 2.73509 9.51598 2.70403 9.43999 2.68818C9.36399 2.67233 9.28558 2.67203 9.20947 2.68728C9.13335 2.70254 9.06111 2.73304 8.99709 2.77695L8.18777 3.28325L8.68487 2.0405C8.74163 1.8988 8.73978 1.74035 8.67972 1.60001C8.61965 1.45967 8.5063 1.34894 8.36459 1.29217C8.22289 1.23541 8.06444 1.23726 7.9241 1.29733C7.78376 1.35739 7.67303 1.47074 7.61626 1.61245L7.00026 3.15361L6.38349 1.61168C6.34149 1.50682 6.26956 1.41665 6.17666 1.3524C6.08376 1.28814 5.97401 1.25266 5.86108 1.25036ZM1.24681 8.72985V12.1819C1.24681 13.4515 2.27936 14.4833 3.54819 14.4833H6.42491V8.72985H1.24681ZM7.5756 8.72985V14.4833H10.4523C11.7212 14.4833 12.7537 13.4515 12.7537 12.1819V8.72985H7.5756Z" fill="url(#paint0_linear_2971_2065)" />
-                  <defs>
-                    <linearGradient id="paint0_linear_2971_2065" x1="0.383789" y1="2.365" x2="13.5515" y2="14.2777" gradientUnits="userSpaceOnUse">
-                      <stop stop-color="#FFDB00" />
-                      <stop offset="0.474" stop-color="#FFDB00" stop-opacity="0" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-
-                <span className="ml-2 text-white font-italic text-sm sm:text-base lg:text-lg" style={{ fontFamily: 'Archivo, sans-serif' }}>
-                  LEVEL UP REWARDS
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='relative overflow-hidden  md:flex flex-row justify-between items-center mt-10 max-w-[1200px] px-4 w-[92%] gap-5 left-2'>
-          <div className='md:w-[50%] md:mb-0 mb-10 h-[50vh] bg-[#161625E5] rounded-lg flex flex-col justify-center items-center gap-[3%]'>
-            <div className='h-[50%] w-[100%]'>
-              <svg className='h-[150%] w-[100%]' style={{ aspectRatio: "xMidYMid meet" }} viewBox="0 0 619 550" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <mask id="mask0_2973_2987" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="619" height="550">
-                  <rect width="619" height="550" fill="url(#paint0_radial_2973_2987)" />
-                </mask>
-                <g mask="url(#mask0_2973_2987)">
-                  <g filter="url(#filter0_d_2973_2987)">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M759.036 572H-139.416C-139.725 572 -140 571.725 -140 571.382V-27.3824C-140 -27.7255 -139.725 -28 -139.416 -28H759.036C759.345 -28 759.62 -27.7255 759.62 -27.3824V571.382C759.62 571.725 759.345 572 759.036 572ZM-138.799 570.799H758.418V-26.799H-138.799V570.799Z" fill="#222236" />
-                    <path d="M759.036 543.486H-139.416C-139.725 543.486 -140 543.211 -140 542.868C-140 542.525 -139.725 542.285 -139.416 542.285H759.036C759.345 542.285 759.62 542.525 759.62 542.868C759.62 543.211 759.345 543.486 759.036 543.486Z" fill="#222236" />
-                    <path d="M759.036 514.971H-139.416C-139.725 514.971 -140 514.697 -140 514.354C-140 514.045 -139.725 513.771 -139.416 513.771H759.036C759.345 513.771 759.62 514.045 759.62 514.354C759.62 514.697 759.345 514.971 759.036 514.971Z" fill="#222236" />
-                    <path d="M759.036 486.457H-139.416C-139.725 486.457 -140 486.183 -140 485.84C-140 485.531 -139.725 485.256 -139.416 485.256H759.036C759.345 485.256 759.62 485.531 759.62 485.84C759.62 486.183 759.345 486.457 759.036 486.457Z" fill="#222236" />
-                    <path d="M759.036 457.943H-139.416C-139.725 457.943 -140 457.668 -140 457.325C-140 457.017 -139.725 456.742 -139.416 456.742H759.036C759.345 456.742 759.62 457.017 759.62 457.325C759.62 457.668 759.345 457.943 759.036 457.943Z" fill="#222236" />
-                    <path d="M759.036 429.429H-139.416C-139.725 429.429 -140 429.154 -140 428.811C-140 428.502 -139.725 428.228 -139.416 428.228H759.036C759.345 428.228 759.62 428.502 759.62 428.811C759.62 429.154 759.345 429.429 759.036 429.429Z" fill="#222236" />
-                    <path d="M759.036 400.915H-139.416C-139.725 400.915 -140 400.64 -140 400.297C-140 399.988 -139.725 399.714 -139.416 399.714H759.036C759.345 399.714 759.62 399.988 759.62 400.297C759.62 400.64 759.345 400.915 759.036 400.915Z" fill="#222236" />
-                    <path d="M759.036 372.4H-139.416C-139.725 372.4 -140 372.126 -140 371.783C-140 371.474 -139.725 371.199 -139.416 371.199H759.036C759.345 371.199 759.62 371.474 759.62 371.783C759.62 372.126 759.345 372.4 759.036 372.4Z" fill="#222236" />
-                    <path d="M759.036 343.886H-139.416C-139.725 343.886 -140 343.612 -140 343.268C-140 342.96 -139.725 342.685 -139.416 342.685H759.036C759.345 342.685 759.62 342.96 759.62 343.268C759.62 343.612 759.345 343.886 759.036 343.886Z" fill="#222236" />
-                    <path d="M759.036 315.372H-139.416C-139.725 315.372 -140 315.097 -140 314.754C-140 314.445 -139.725 314.171 -139.416 314.171H759.036C759.345 314.171 759.62 314.445 759.62 314.754C759.62 315.097 759.345 315.372 759.036 315.372Z" fill="#222236" />
-                    <path d="M759.036 286.858H-139.416C-139.725 286.858 -140 286.583 -140 286.24C-140 285.931 -139.725 285.657 -139.416 285.657H759.036C759.345 285.657 759.62 285.931 759.62 286.274C759.62 286.583 759.345 286.858 759.036 286.858Z" fill="#222236" />
-                    <path d="M759.036 258.343H-139.416C-139.725 258.343 -140 258.069 -140 257.76C-140 257.417 -139.725 257.142 -139.416 257.142H759.036C759.345 257.142 759.62 257.417 759.62 257.76C759.62 258.069 759.345 258.343 759.036 258.343Z" fill="#222236" />
-                    <path d="M759.036 229.829H-139.416C-139.725 229.829 -140 229.555 -140 229.246C-140 228.903 -139.725 228.628 -139.416 228.628H759.036C759.345 228.628 759.62 228.903 759.62 229.246C759.62 229.555 759.345 229.829 759.036 229.829Z" fill="#222236" />
-                    <path d="M759.036 201.315H-139.416C-139.725 201.315 -140 201.04 -140 200.732C-140 200.388 -139.725 200.114 -139.416 200.114H759.036C759.345 200.114 759.62 200.388 759.62 200.732C759.62 201.04 759.345 201.315 759.036 201.315Z" fill="#222236" />
-                    <path d="M759.036 172.801H-139.416C-139.725 172.801 -140 172.526 -140 172.217C-140 171.874 -139.725 171.6 -139.416 171.6H759.036C759.345 171.6 759.62 171.874 759.62 172.217C759.62 172.526 759.345 172.801 759.036 172.801Z" fill="#222236" />
-                    <path d="M759.036 144.286H-139.416C-139.725 144.286 -140 144.012 -140 143.703C-140 143.36 -139.725 143.085 -139.416 143.085H759.036C759.345 143.085 759.62 143.36 759.62 143.703C759.62 144.012 759.345 144.286 759.036 144.286Z" fill="#222236" />
-                    <path d="M759.036 115.772H-139.416C-139.725 115.772 -140 115.498 -140 115.189C-140 114.846 -139.725 114.571 -139.416 114.571H759.036C759.345 114.571 759.62 114.846 759.62 115.189C759.62 115.498 759.345 115.772 759.036 115.772Z" fill="#222236" />
-                    <path d="M759.036 87.2579H-139.416C-139.725 87.2579 -140 86.9834 -140 86.6746C-140 86.3315 -139.725 86.057 -139.416 86.057H759.036C759.345 86.057 759.62 86.3315 759.62 86.6746C759.62 86.9834 759.345 87.2579 759.036 87.2579Z" fill="#222236" />
-                    <path d="M759.036 58.7437H-139.416C-139.725 58.7437 -140 58.4692 -140 58.1603C-140 57.8172 -139.725 57.5427 -139.416 57.5427H759.036C759.345 57.5427 759.62 57.8172 759.62 58.1603C759.62 58.4692 759.345 58.7437 759.036 58.7437Z" fill="#222236" />
-                    <path d="M759.036 30.2294H-139.416C-139.725 30.2294 -140 29.9549 -140 29.6461C-140 29.303 -139.725 29.0285 -139.416 29.0285H759.036C759.345 29.0285 759.62 29.303 759.62 29.6461C759.62 29.9549 759.345 30.2294 759.036 30.2294Z" fill="#222236" />
-                    <path d="M759.036 1.71519H-139.416C-139.725 1.71519 -140 1.44069 -140 1.13187C-140 0.788742 -139.725 0.514231 -139.416 0.514231H759.036C759.345 0.514231 759.62 0.788742 759.62 1.13187C759.62 1.44069 759.345 1.71519 759.036 1.71519Z" fill="#222236" />
-                    <path d="M730.033 572C729.724 572 729.449 571.725 729.449 571.382V-27.3824C729.449 -27.7255 729.724 -28 730.033 -28C730.376 -28 730.651 -27.7255 730.651 -27.3824V571.382C730.651 571.725 730.376 572 730.033 572Z" fill="#222236" />
-                    <path d="M701.064 572C700.721 572 700.446 571.725 700.446 571.382V-27.3824C700.446 -27.7255 700.721 -28 701.064 -28C701.407 -28 701.647 -27.7255 701.647 -27.3824V571.382C701.647 571.725 701.407 572 701.064 572Z" fill="#222236" />
-                    <path d="M672.095 572C671.752 572 671.477 571.725 671.477 571.382V-27.3824C671.477 -27.7255 671.752 -28 672.095 -28C672.404 -28 672.678 -27.7255 672.678 -27.3824V571.382C672.678 571.725 672.404 572 672.095 572Z" fill="#222236" />
-                    <path d="M643.091 572C642.782 572 642.508 571.725 642.508 571.382V-27.3824C642.508 -27.7255 642.782 -28 643.091 -28C643.435 -28 643.709 -27.7255 643.709 -27.3824V571.382C643.709 571.725 643.435 572 643.091 572Z" fill="#222236" />
-                    <path d="M614.122 572C613.779 572 613.505 571.725 613.505 571.382V-27.3824C613.505 -27.7255 613.779 -28 614.122 -28C614.431 -28 614.706 -27.7255 614.706 -27.3824V571.382C614.706 571.725 614.431 572 614.122 572Z" fill="#222236" />
-                    <path d="M585.119 572C584.81 572 584.535 571.725 584.535 571.382V-27.3824C584.535 -27.7255 584.81 -28 585.119 -28C585.462 -28 585.737 -27.7255 585.737 -27.3824V571.382C585.737 571.725 585.462 572 585.119 572Z" fill="#222236" />
-                    <path d="M556.15 572C555.807 572 555.566 571.725 555.566 571.382V-27.3824C555.566 -27.7255 555.807 -28 556.15 -28C556.493 -28 556.768 -27.7255 556.768 -27.3824V571.382C556.768 571.725 556.493 572 556.15 572Z" fill="#222236" />
-                    <path d="M527.181 572C526.838 572 526.563 571.725 526.563 571.382V-27.3824C526.563 -27.7255 526.838 -28 527.181 -28C527.49 -28 527.764 -27.7255 527.764 -27.3824V571.382C527.764 571.725 527.49 572 527.181 572Z" fill="#222236" />
-                    <path d="M498.177 572C497.869 572 497.594 571.725 497.594 571.382V-27.3824C497.594 -27.7255 497.869 -28 498.177 -28C498.521 -28 498.795 -27.7255 498.795 -27.3824V571.382C498.795 571.725 498.521 572 498.177 572Z" fill="#222236" />
-                    <path d="M469.208 572C468.865 572 468.625 571.725 468.625 571.382V-27.3824C468.625 -27.7255 468.865 -28 469.208 -28C469.552 -28 469.792 -27.7255 469.792 -27.3824V571.382C469.792 571.725 469.552 572 469.208 572Z" fill="#222236" />
-                    <path d="M440.239 572C439.896 572 439.621 571.725 439.621 571.382V-27.3824C439.621 -27.7255 439.896 -28 440.239 -28C440.548 -28 440.823 -27.7255 440.823 -27.3824V571.382C440.823 571.725 440.548 572 440.239 572Z" fill="#222236" />
-                    <path d="M411.236 572C410.927 572 410.652 571.725 410.652 571.382V-27.3824C410.652 -27.7255 410.927 -28 411.236 -28C411.579 -28 411.854 -27.7255 411.854 -27.3824V571.382C411.854 571.725 411.579 572 411.236 572Z" fill="#222236" />
-                    <path d="M382.267 572C381.924 572 381.649 571.725 381.649 571.382V-27.3824C381.649 -27.7255 381.924 -28 382.267 -28C382.61 -28 382.85 -27.7255 382.85 -27.3824V571.382C382.85 571.725 382.61 572 382.267 572Z" fill="#222236" />
-                    <path d="M353.298 572C352.955 572 352.68 571.725 352.68 571.382V-27.3824C352.68 -27.7255 352.955 -28 353.298 -28C353.607 -28 353.881 -27.7255 353.881 -27.3824V571.382C353.881 571.725 353.607 572 353.298 572Z" fill="#222236" />
-                    <path d="M324.294 572C323.985 572 323.711 571.725 323.711 571.382V-27.3824C323.711 -27.7255 323.985 -28 324.294 -28C324.638 -28 324.912 -27.7255 324.912 -27.3824V571.382C324.912 571.725 324.638 572 324.294 572Z" fill="#222236" />
-                    <path d="M295.325 572C294.982 572 294.708 571.725 294.708 571.382V-27.3824C294.708 -27.7255 294.982 -28 295.325 -28C295.634 -28 295.909 -27.7255 295.909 -27.3824V571.382C295.909 571.725 295.634 572 295.325 572Z" fill="#222236" />
-                    <path d="M266.322 572C266.013 572 265.738 571.725 265.738 571.382V-27.3824C265.738 -27.7255 266.013 -28 266.322 -28C266.665 -28 266.94 -27.7255 266.94 -27.3824V571.382C266.94 571.725 266.665 572 266.322 572Z" fill="#222236" />
-                    <path d="M237.353 572C237.01 572 236.769 571.725 236.769 571.382V-27.3824C236.769 -27.7255 237.01 -28 237.353 -28C237.696 -28 237.971 -27.7255 237.971 -27.3824V571.382C237.971 571.725 237.696 572 237.353 572Z" fill="#222236" />
-                    <path d="M208.384 572C208.041 572 207.766 571.725 207.766 571.382V-27.3824C207.766 -27.7255 208.041 -28 208.384 -28C208.693 -28 208.967 -27.7255 208.967 -27.3824V571.382C208.967 571.725 208.693 572 208.384 572Z" fill="#222236" />
-                    <path d="M179.38 572C179.072 572 178.797 571.725 178.797 571.382V-27.3824C178.797 -27.7255 179.072 -28 179.38 -28C179.724 -28 179.998 -27.7255 179.998 -27.3824V571.382C179.998 571.725 179.724 572 179.38 572Z" fill="#222236" />
-                    <path d="M150.411 572C150.068 572 149.828 571.725 149.828 571.382V-27.3824C149.828 -27.7255 150.068 -28 150.411 -28C150.755 -28 150.995 -27.7255 150.995 -27.3824V571.382C150.995 571.725 150.755 572 150.411 572Z" fill="#222236" />
-                    <path d="M121.442 572C121.099 572 120.825 571.725 120.825 571.382V-27.3824C120.825 -27.7255 121.099 -28 121.442 -28C121.751 -28 122.026 -27.7255 122.026 -27.3824V571.382C122.026 571.725 121.751 572 121.442 572Z" fill="#222236" />
-                    <path d="M92.439 572C92.1301 572 91.8555 571.725 91.8555 571.382V-27.3824C91.8555 -27.7255 92.1301 -28 92.439 -28C92.7822 -28 93.0568 -27.7255 93.0568 -27.3824V571.382C93.0568 571.725 92.7822 572 92.439 572Z" fill="#222236" />
-                    <path d="M63.4699 572C63.1266 572 62.8521 571.725 62.8521 571.382V-27.3824C62.8521 -27.7255 63.1266 -28 63.4699 -28C63.8131 -28 64.0534 -27.7255 64.0534 -27.3824V571.382C64.0534 571.725 63.8131 572 63.4699 572Z" fill="#222236" />
-                    <path d="M34.5008 572C34.1576 572 33.883 571.725 33.883 571.382V-27.3824C33.883 -27.7255 34.1576 -28 34.5008 -28C34.8098 -28 35.0843 -27.7255 35.0843 -27.3824V571.382C35.0843 571.725 34.8098 572 34.5008 572Z" fill="#222236" />
-                    <path d="M5.49745 572C5.18855 572 4.91396 571.725 4.91396 571.382V-27.3824C4.91396 -27.7255 5.18855 -28 5.49745 -28C5.8407 -28 6.11528 -27.7255 6.11528 -27.3824V571.382C6.11528 571.725 5.8407 572 5.49745 572Z" fill="#222236" />
-                    <path d="M-23.4716 572C-23.8148 572 -24.0894 571.725 -24.0894 571.382V-27.3824C-24.0894 -27.7255 -23.8148 -28 -23.4716 -28C-23.1627 -28 -22.8881 -27.7255 -22.8881 -27.3824V571.382C-22.8881 571.725 -23.1627 572 -23.4716 572Z" fill="#222236" />
-                    <path d="M-52.475 572C-52.7839 572 -53.0585 571.725 -53.0585 571.382V-27.3824C-53.0585 -27.7255 -52.7839 -28 -52.475 -28C-52.1318 -28 -51.8572 -27.7255 -51.8572 -27.3824V571.382C-51.8572 571.725 -52.1318 572 -52.475 572Z" fill="#222236" />
-                    <path d="M-81.4441 572C-81.7873 572 -82.0276 571.725 -82.0276 571.382V-27.3824C-82.0276 -27.7255 -81.7873 -28 -81.4441 -28C-81.1008 -28 -80.8262 -27.7255 -80.8262 -27.3824V571.382C-80.8262 571.725 -81.1008 572 -81.4441 572Z" fill="#222236" />
-                    <path d="M-110.413 572C-110.756 572 -111.031 571.725 -111.031 571.382V-27.3824C-111.031 -27.7255 -110.756 -28 -110.413 -28C-110.104 -28 -109.83 -27.7255 -109.83 -27.3824V571.382C-109.83 571.725 -110.104 572 -110.413 572Z" fill="#222236" />
-                  </g>
-                </g>
-                <defs>
-                  <filter id="filter0_d_2973_2987" x="-144" y="-32" width="907.62" height="608" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset />
-                    <feGaussianBlur stdDeviation="2" />
-                    <feComposite in2="hardAlpha" operator="out" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2973_2987" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2973_2987" result="shape" />
-                  </filter>
-                  <radialGradient id="paint0_radial_2973_2987" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(310 175.5) rotate(90) scale(223.5 251.539)">
-                    <stop stop-color="#201f32" />
-                    <stop offset="1" stop-color="#201f32" stop-opacity="0" />
-                  </radialGradient>
-                </defs>
-              </svg>
-
-              <Image src={rankPath} className='relative top-[-130%] left-1/2 transform -translate-x-1/2 w-[40%]' unoptimized width={100} height={100} alt='roobet rank image'></Image>
-            </div>
-
-            <div className='h-[20%]'>
-              <h1 className="text-white text-3xl font-bold text-center">{rank}</h1>
-              <p className=" text-gray-400 text-sm text-center">
-                ${amountWagered} Wagered
+              <h1 className='font-bold mt-3 text-[20px]'>$15 Reload & Instant Rakeback</h1>
+              <p className='text-[#989EAE] text-[13px]'>
+                Click on the button below to register instantly.
               </p>
             </div>
 
-            <div className='bg-[#202032] w-[90%] h-[35%] mb-4 rounded-lg p-[5%]'>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-semibold">YOUR PROGRESS</span>
-                <span className="text-sm font-semibold">{progress.toFixed(2)}%</span>
-              </div>
-              <div className="relative h-3 rounded-full bg-gray-700">
-                <div
-                  className="absolute top-0 left-0 h-3 rounded-full bg-yellow-500"
-                  style={{ width: `${progress}%`, background: `linear-gradient(90deg, #DDB43F 0%, #9B7C25 100%)` }}
+            <div className='flex flex-wrap justify-between gap-4 items-center'>
+              <JaggedBackgroundItem fullWidth={false} fill='#e5e7eb'>
+                <div className='flex justify-between items-center w-[150px]'>
+                  <h1 className='font-bold'>TCK</h1>
+
+                  <div className='bg-[#989EAE54] w-[25px] h-[25px] flex rounded-full items-center justify-center'>
+                    <svg
+                      width='13'
+                      height='13'
+                      viewBox='0 0 6 7'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        fill-rule='evenodd'
+                        clip-rule='evenodd'
+                        d='M0.742191 2.53506H3.48647C3.89466 2.53506 4.22866 2.84828 4.22866 3.23097V5.8041C4.22866 6.18683 3.89461 6.5 3.48647 6.5H0.742191C0.334001 6.5 0 6.18678 0 5.8041V3.23097C0 2.84823 0.334051 2.53506 0.742191 2.53506ZM2.51353 0.500058H5.25781C5.666 0.500058 6 0.813276 6 1.19596V3.76909C6 4.15183 5.66595 4.465 5.25781 4.465H4.54041V3.23091C4.54041 2.6875 4.06623 2.24289 3.48668 2.24289H1.77149V1.1959C1.77149 0.813171 2.10554 0.5 2.51368 0.5L2.51353 0.500058Z'
+                        fill='#989EAE'
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </JaggedBackgroundItem>
+
+              <button className='flex gap-2 items-center justify-center px-4 py-2 rounded-md font-semibold text-white bg-[#DAA520] hover:bg-[#c9991c] outline-none transition'>
+                Claim Reward
+                <svg
+                  width='10px'
+                  height='15px'
+                  viewBox='0 0 9 14'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <g filter='url(#filter0_d_2971_1731)'>
+                    <path
+                      fill-rule='evenodd'
+                      clip-rule='evenodd'
+                      d='M2.62792 10.3923C2.55824 10.4614 2.46502 10.5 2.36799 10.5C2.27095 10.5 2.17771 10.4614 2.10804 10.3923C2.07385 10.3583 2.04667 10.3176 2.02811 10.2727C2.00956 10.2278 2 10.1795 2 10.1307C2 10.0819 2.00956 10.0337 2.02811 9.98874C2.04667 9.94381 2.07385 9.90313 2.10804 9.86911L6.01976 5.93156L2.10923 2.13029C2.07517 2.09645 2.0481 2.05598 2.02961 2.01126C2.01112 1.96653 2.00158 1.91847 2.00158 1.86991C2.00158 1.82135 2.01112 1.77329 2.02961 1.72856C2.0481 1.68384 2.07517 1.64334 2.10923 1.6095C2.17834 1.53936 2.27179 1.5 2.36918 1.5C2.46656 1.5 2.56 1.53936 2.62911 1.6095L7 5.93156L2.62792 10.3923Z'
+                      fill='white'
+                      fill-opacity='0.75'
+                      shape-rendering='crispEdges'
+                    />
+                  </g>
+                  <defs>
+                    <filter
+                      id='filter0_d_2971_1731'
+                      x='0'
+                      y='0.5'
+                      width='9'
+                      height='13'
+                      filterUnits='userSpaceOnUse'
+                      color-interpolation-filters='sRGB'
+                    >
+                      <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                      <feColorMatrix
+                        in='SourceAlpha'
+                        type='matrix'
+                        values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                        result='hardAlpha'
+                      />
+                      <feOffset dy='1' />
+                      <feGaussianBlur stdDeviation='1' />
+                      <feComposite in2='hardAlpha' operator='out' />
+                      <feColorMatrix
+                        type='matrix'
+                        values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'
+                      />
+                      <feBlend
+                        mode='normal'
+                        in2='BackgroundImageFix'
+                        result='effect1_dropShadow_2971_1731'
+                      />
+                      <feBlend
+                        mode='normal'
+                        in='SourceGraphic'
+                        in2='effect1_dropShadow_2971_1731'
+                        result='shape'
+                      />
+                    </filter>
+                  </defs>
+                </svg>
+              </button>
+            </div>
+
+            <svg
+              className='absolute left-0'
+              width='80%'
+              height='100%'
+              viewBox='0 0 1256 144'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <g filter='url(#filter0_f_2971_1715)'>
+                <ellipse
+                  cx='193'
+                  cy='166.5'
+                  rx='193'
+                  ry='22.5'
+                  fill='url(#paint0_linear_2971_1715)'
                 />
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 h-5 w-1.5 bg-white rounded-2xl"
-                  style={{
-                    left: `calc(${progress}% - 6px)`,
-                  }}
+              </g>
+              <defs>
+                <filter
+                  id='filter0_f_2971_1715'
+                  x='-300'
+                  y='-156'
+                  width='986'
+                  height='645'
+                  filterUnits='userSpaceOnUse'
+                  colorInterpolationFilters='sRGB'
+                >
+                  <feFlood floodOpacity='0' result='BackgroundImageFix' />
+                  <feBlend
+                    mode='normal'
+                    in='SourceGraphic'
+                    in2='BackgroundImageFix'
+                    result='shape'
+                  />
+                  <feGaussianBlur stdDeviation='150' result='effect1_foregroundBlur_2971_1715' />
+                </filter>
+                <linearGradient
+                  id='paint0_linear_2971_1715'
+                  x1='9.0619e-07'
+                  y1='165.176'
+                  x2='386'
+                  y2='165.176'
+                  gradientUnits='userSpaceOnUse'
+                >
+                  <stop stopColor='#DDB43F' />
+                  <stop offset='1' stopColor='#9B7C25' />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <div className='mt-[130px] w-full max-w-[1200px] grid md:gap-5 gap-14 lg:grid-cols-2 '>
+          <div>
+            <div className='flex items-center relative'>
+              <svg
+                className='absolute'
+                width='68'
+                height='51'
+                viewBox='0 0 48 31'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <g filter='url(#filter0_d_0_1)'>
+                  <path
+                    d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                    fill='url(#paint0_linear_0_1)'
+                    fill-opacity='0.75'
+                    shape-rendering='crispEdges'
+                  />
+                  <path
+                    d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                    fill='url(#paint1_linear_0_1)'
+                    fill-opacity='0.15'
+                    shape-rendering='crispEdges'
+                  />
+                </g>
+                <path
+                  d='M18.9997 13.8665C20.6105 13.8665 21.9163 12.5607 21.9163 10.9499C21.9163 9.33904 20.6105 8.0332 18.9997 8.0332C17.3888 8.0332 16.083 9.33904 16.083 10.9499C16.083 12.5607 17.3888 13.8665 18.9997 13.8665Z'
+                  fill='#DDB440'
                 />
-              </div>
-              <div className="text-sm text-gray-400 mt-2">
-                ${remaining.toLocaleString()} Left for Next Rank
+                <path
+                  d='M18.9998 15.3247C16.0773 15.3247 13.6973 17.2847 13.6973 19.6997C13.6973 19.863 13.8256 19.9914 13.9889 19.9914H24.0106C24.174 19.9914 24.3023 19.863 24.3023 19.6997C24.3023 17.2847 21.9223 15.3247 18.9998 15.3247Z'
+                  fill='#DDB440'
+                />
+                <defs>
+                  <filter
+                    id='filter0_d_0_1'
+                    x='0.140625'
+                    y='0'
+                    width='47.834'
+                    height='30.9575'
+                    filterUnits='userSpaceOnUse'
+                    color-interpolation-filters='sRGB'
+                  >
+                    <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                    <feColorMatrix
+                      in='SourceAlpha'
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                      result='hardAlpha'
+                    />
+                    <feOffset dy='1' />
+                    <feComposite in2='hardAlpha' operator='out' />
+                    <feColorMatrix
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in2='BackgroundImageFix'
+                      result='effect1_dropShadow_0_1'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in='SourceGraphic'
+                      in2='effect1_dropShadow_0_1'
+                      result='shape'
+                    />
+                  </filter>
+                  <linearGradient
+                    id='paint0_linear_0_1'
+                    x1='24'
+                    y1='0'
+                    x2='24'
+                    y2='30'
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stop-color='#26263A' />
+                    <stop offset='1' stop-color='#11111F' />
+                  </linearGradient>
+                  <linearGradient
+                    id='paint1_linear_0_1'
+                    x1='60'
+                    y1='15'
+                    x2='-10.5'
+                    y2='15'
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stop-color='#DDB440' stop-opacity='0' />
+                    <stop offset='1' stop-color='#DDB440' />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <h1 className='italic ml-12 mb-1 relative font-bold text-[20px]'>YOUR RANK</h1>
+            </div>
+
+            <div
+              style={{ backgroundImage: 'url(/img/img.png)', backgroundSize: 'contain' }}
+              className='w-full flex flex-col lg:h-[500px] mt-6 gap-5 md:gap-0 relative rounded-[8px] border border-[#25253A] bg-[#161625E5] px-6 py-5'
+            >
+              <Image
+                className='mx-auto mt-16'
+                src={'/img/roobethd/silver_3.png'}
+                width='200'
+                height='100'
+              />
+              <h1 className='text-center mt-10 font-bold text-[24px] italic'>SILVER III</h1>
+              <p className='text-[#989EAE] text-center mt-1'>$50,000.54 Wagered</p>
+
+              <div className='mt-[50px]'>
+                <div className='bg-[#202032] rounded-lg w-full px-5 py-4'>
+                  <div className='flex justify-between items-center'>
+                    <h1 className='font-bold italic text-[15px]'>YOUR PROGRESS</h1>
+                    <h1 className='font-bold italic text-[15px]'>41.5%</h1>
+                  </div>
+
+                  <div className='relative w-full h-2.5 mt-3 bg-[#1A1A1A] rounded-full'>
+                    <div
+                      className='absolute left-0 top-0 h-2 bg-gradient-to-r from-[#dcb33f] to-[#9d7d26] rounded-full'
+                      style={{ width: '40%' }}
+                    ></div>
+                    <div
+                      className='absolute top-1/2 bg-white w-1.5 h-4 rounded-[10px] -translate-y-1/2'
+                      style={{ left: '39%' }}
+                    ></div>
+                  </div>
+
+                  <h1 className='text-[#989EAE] font-[600] text-[15px] mt-3'>
+                    $50,000.54 Left for Next Rank
+                  </h1>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className='md:w-[50%] h-[50vh] bg-[#161625E5] rounded-lg' style={{
-            borderRadius: "0.5rem",
-            border: "2px solid transparent",
-            background: `
-              linear-gradient(#161625E5, #161625E5) padding-box, 
-              linear-gradient(155.71deg, #25253A -0.11%, rgba(37, 37, 58, 0) 50.4%) border-box
-            `,
-            backgroundClip: "content-box, border-box",
-          }}>
-
-            <div className="py-4 px-4">
-              <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold text-white">{rank.split(" ")[0]}</h1>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleNavigation("up")}
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ease-in-out ${currentIndex === 0
-                      ? "bg-[#26263A] cursor-not-allowed opacity-[25%]"
-                      : "bg-[#26263A] hover:opacity-[75%]"
-                      }`}
-                    disabled={currentIndex === 0}
+          <div>
+            <div className='flex items-center relative'>
+              <svg
+                className='absolute'
+                width='68'
+                height='51'
+                viewBox='0 0 48 31'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <g filter='url(#filter0_d_0_1)'>
+                  <path
+                    d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                    fill='url(#paint0_linear_0_1)'
+                    fill-opacity='0.75'
+                    shape-rendering='crispEdges'
+                  />
+                  <path
+                    d='M6.96812 0.38548L0.154595 29.343C0.0776814 29.6699 0.338454 29.9781 0.673562 29.9564L47.5071 26.9284C47.7803 26.9108 47.9885 26.6767 47.9741 26.4033L46.6131 0.473792C46.5992 0.2082 46.3797 0 46.1138 0H7.45483C7.22281 0 7.02127 0.159622 6.96812 0.38548Z'
+                    fill='url(#paint1_linear_0_1)'
+                    fill-opacity='0.15'
+                    shape-rendering='crispEdges'
+                  />
+                </g>
+                <path
+                  d='M17.8611 7.25036C17.766 7.24842 17.6719 7.2701 17.5872 7.31344C17.5025 7.35679 17.4299 7.42046 17.3759 7.49874C17.3218 7.57703 17.288 7.6675 17.2775 7.76204C17.267 7.85659 17.2801 7.95226 17.3156 8.0405L17.812 9.28172L17.0042 8.77618C16.8747 8.69531 16.7184 8.66919 16.5696 8.70357C16.4209 8.73796 16.2919 8.83002 16.211 8.95952C16.1301 9.08902 16.104 9.24534 16.1384 9.3941C16.1728 9.54285 16.2648 9.67186 16.3943 9.75273L16.995 10.1279H13.8222C13.4408 10.1283 13.0752 10.2799 12.8055 10.5496C12.5359 10.8192 12.3842 11.1849 12.3838 11.5662V12.1416C12.3838 12.9348 13.0289 13.5799 13.8222 13.5799H24.1784C24.5597 13.5795 24.9253 13.4279 25.195 13.1582C25.4647 12.8885 25.6163 12.5229 25.6167 12.1416V11.5662C25.6163 11.1849 25.4647 10.8192 25.195 10.5496C24.9253 10.2799 24.5597 10.1283 24.1784 10.1279H21.0055L21.6062 9.75196C21.6737 9.71369 21.7328 9.66215 21.7799 9.60043C21.827 9.53872 21.8611 9.46812 21.8802 9.39287C21.8993 9.31762 21.903 9.23929 21.891 9.16259C21.879 9.0859 21.8516 9.01242 21.8105 8.94658C21.7694 8.88074 21.7153 8.82391 21.6517 8.7795C21.588 8.73509 21.516 8.70403 21.44 8.68818C21.364 8.67233 21.2856 8.67203 21.2095 8.68728C21.1333 8.70254 21.0611 8.73304 20.9971 8.77695L20.1878 9.28325L20.6849 8.0405C20.7416 7.8988 20.7398 7.74035 20.6797 7.60001C20.6197 7.45967 20.5063 7.34894 20.3646 7.29217C20.2229 7.23541 20.0644 7.23726 19.9241 7.29733C19.7838 7.35739 19.673 7.47074 19.6163 7.61245L19.0003 9.15361L18.3835 7.61168C18.3415 7.50682 18.2696 7.41665 18.1767 7.3524C18.0838 7.28814 17.974 7.25266 17.8611 7.25036ZM13.2468 14.7299V18.1819C13.2468 19.4515 14.2794 20.4833 15.5482 20.4833H18.4249V14.7299H13.2468ZM19.5756 14.7299V20.4833H22.4523C23.7212 20.4833 24.7537 19.4515 24.7537 18.1819V14.7299H19.5756Z'
+                  fill='#DDB440'
+                />
+                <path
+                  d='M17.8611 7.25036C17.766 7.24842 17.6719 7.2701 17.5872 7.31344C17.5025 7.35679 17.4299 7.42046 17.3759 7.49874C17.3218 7.57703 17.288 7.6675 17.2775 7.76204C17.267 7.85659 17.2801 7.95226 17.3156 8.0405L17.812 9.28172L17.0042 8.77618C16.8747 8.69531 16.7184 8.66919 16.5696 8.70357C16.4209 8.73796 16.2919 8.83002 16.211 8.95952C16.1301 9.08902 16.104 9.24534 16.1384 9.3941C16.1728 9.54285 16.2648 9.67186 16.3943 9.75273L16.995 10.1279H13.8222C13.4408 10.1283 13.0752 10.2799 12.8055 10.5496C12.5359 10.8192 12.3842 11.1849 12.3838 11.5662V12.1416C12.3838 12.9348 13.0289 13.5799 13.8222 13.5799H24.1784C24.5597 13.5795 24.9253 13.4279 25.195 13.1582C25.4647 12.8885 25.6163 12.5229 25.6167 12.1416V11.5662C25.6163 11.1849 25.4647 10.8192 25.195 10.5496C24.9253 10.2799 24.5597 10.1283 24.1784 10.1279H21.0055L21.6062 9.75196C21.6737 9.71369 21.7328 9.66215 21.7799 9.60043C21.827 9.53872 21.8611 9.46812 21.8802 9.39287C21.8993 9.31762 21.903 9.23929 21.891 9.16259C21.879 9.0859 21.8516 9.01242 21.8105 8.94658C21.7694 8.88074 21.7153 8.82391 21.6517 8.7795C21.588 8.73509 21.516 8.70403 21.44 8.68818C21.364 8.67233 21.2856 8.67203 21.2095 8.68728C21.1333 8.70254 21.0611 8.73304 20.9971 8.77695L20.1878 9.28325L20.6849 8.0405C20.7416 7.8988 20.7398 7.74035 20.6797 7.60001C20.6197 7.45967 20.5063 7.34894 20.3646 7.29217C20.2229 7.23541 20.0644 7.23726 19.9241 7.29733C19.7838 7.35739 19.673 7.47074 19.6163 7.61245L19.0003 9.15361L18.3835 7.61168C18.3415 7.50682 18.2696 7.41665 18.1767 7.3524C18.0838 7.28814 17.974 7.25266 17.8611 7.25036ZM13.2468 14.7299V18.1819C13.2468 19.4515 14.2794 20.4833 15.5482 20.4833H18.4249V14.7299H13.2468ZM19.5756 14.7299V20.4833H22.4523C23.7212 20.4833 24.7537 19.4515 24.7537 18.1819V14.7299H19.5756Z'
+                  fill='url(#paint2_linear_0_1)'
+                />
+                <defs>
+                  <filter
+                    id='filter0_d_0_1'
+                    x='0.140625'
+                    y='0'
+                    width='47.834'
+                    height='30.9575'
+                    filterUnits='userSpaceOnUse'
+                    color-interpolation-filters='sRGB'
                   >
-                    <span className="text-white">↑</span>
+                    <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                    <feColorMatrix
+                      in='SourceAlpha'
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                      result='hardAlpha'
+                    />
+                    <feOffset dy='1' />
+                    <feComposite in2='hardAlpha' operator='out' />
+                    <feColorMatrix
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in2='BackgroundImageFix'
+                      result='effect1_dropShadow_0_1'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in='SourceGraphic'
+                      in2='effect1_dropShadow_0_1'
+                      result='shape'
+                    />
+                  </filter>
+                  <linearGradient
+                    id='paint0_linear_0_1'
+                    x1='24'
+                    y1='0'
+                    x2='24'
+                    y2='30'
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stop-color='#26263A' />
+                    <stop offset='1' stop-color='#11111F' />
+                  </linearGradient>
+                  <linearGradient
+                    id='paint1_linear_0_1'
+                    x1='60'
+                    y1='15'
+                    x2='-10.5'
+                    y2='15'
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stop-color='#DDB440' stop-opacity='0' />
+                    <stop offset='1' stop-color='#DDB440' />
+                  </linearGradient>
+                  <linearGradient
+                    id='paint2_linear_0_1'
+                    x1='12.3838'
+                    y1='8.365'
+                    x2='25.5515'
+                    y2='20.2777'
+                    gradientUnits='userSpaceOnUse'
+                  >
+                    <stop stop-color='#FFDB00' />
+                    <stop offset='0.474' stop-color='#FFDB00' stop-opacity='0' />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <h1 className='italic ml-12 mb-1 relative font-bold text-[20px]'>LEVEL UP REWARDS</h1>
+            </div>
+
+            <div className='w-full lg:h-[500px] mt-6 gap-5 md:gap-0 relative  rounded-[8px] border border-[#25253A] bg-[#161625E5] px-6 py-5'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <h1 className='text-[20px] font-bold italic'>SILVER</h1>
+                  <p className='text-[14px] italic text-[#989EAE]'>REWARDS</p>
+                </div>
+
+                <div className='flex gap-1.5 items-center'>
+                  <button
+                    onClick={() => handleNavigation('up')}
+                    className='bg-[#26263A] border-t border-t-[#989EAE]/50 py-2 px-3 rounded-xl'
+                  >
+                    <svg
+                      width='12'
+                      height='25'
+                      viewBox='0 0 12 12'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        d='M10.5332 5.35234L5.99987 0.819004M5.99987 0.819004L1.46654 5.35234M5.99987 0.819004L5.99987 11.1809'
+                        stroke='#989EAE'
+                        stroke-width='1.2'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                      />
+                    </svg>
                   </button>
                   <button
-                    onClick={() => handleNavigation("down")}
-                    className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-300 ease-in-out ${currentIndex === tierKeys.length - 1
-                      ? "bg-[#26263A] cursor-not-allowed opacity-[25%]"
-                      : "bg-[#26263A] hover:opacity-[75%]"
-                      }`}
-                    disabled={currentIndex === tierKeys.length - 1}
+                    onClick={() => handleNavigation('down')}
+                    className='bg-[#26263A] border-t border-t-[#989EAE]/50 py-2 px-3 rounded-xl'
                   >
-                    <span className="text-white">↓</span>
+                    <svg
+                      width='12'
+                      height='25'
+                      viewBox='0 0 12 12'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        d='M10.5332 6.64766L5.99987 11.181M5.99987 11.181L1.46654 6.64766M5.99987 11.181L5.99987 0.819092'
+                        stroke='#989EAE'
+                        stroke-width='1.2'
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                      />
+                    </svg>
                   </button>
                 </div>
               </div>
-              <div className="space-y-4">
+
+              <div className='mt-3 flex flex-col gap-2 '>
                 {rewards[tier].map((reward, index) => (
                   <RewardCard
                     key={index}
@@ -566,112 +698,124 @@ function Roobet() {
           </div>
         </div>
 
-        <div className="text-white py-16 px-8">
-          <div className="relative border-2 border-transparent rounded-lg flex justify-between items-center h-[20vh] px-6 md:px-8 lg:px-12">
+        <div className='max-w-[1200px] grid gap-10 lg:grid-cols-2 w-full mt-[100px] lg:mt-[150px]'>
+          <div className='flex flex-col justify-center'>
+            <h1 className='text-[42px] font-bold'>
+              Visit Roobet<span className='text-[#989EAE] text-[30px]'>.com</span>
+            </h1>
+            <p className='text-[#989EAE] lg:w-[450px]'>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua.
+            </p>
+            <div className='w-[190px] mt-5 h-[50px]'>
+              <JaggedBackgroundItem fullWidth={false} fill='#161622'>
+                <div className='flex justify-between items-center py-4 '>
+                  <h1 className='font-bold'>{code}</h1>
 
-            <div className='flex flex-col items-baseline gap-2'>
-              <div className="flex flex-col items-baseline gap-2">
-                <div className="mt-14">
-                  <h1 className="text-white text-3xl md:text-4xl font-bold">Visit Roobet<span className='text-[#989EAE]'>.com  </span></h1>
-                  <p className="text-[#989EAE] py-1 text-sm md:text-base">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center flex-col justify-start gap-3">
-                <JaggedBackgroundItem fullWidth={false} fill="#161623">
-                  <div className='flex w-[200px] md:w-[8vw] items-center h-[3vh] justify-start cursor-pointer' onClick={copyCode}>
-                    <span className='w-full text-white inline-block text-left font-bold'>
-                      {code}
-                    </span>
-
-                    <div className="aspect-square w-[3vh] bg-[#989EAE54] rounded-full flex items-center justify-center sm:w-[4vh]">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 6 7"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M0.742191 2.53506H3.48647C3.89466 2.53506 4.22866 2.84828 4.22866 3.23097V5.8041C4.22866 6.18683 3.89461 6.5 3.48647 6.5H0.742191C0.334001 6.5 0 6.18678 0 5.8041V3.23097C0 2.84823 0.334051 2.53506 0.742191 2.53506ZM2.51353 0.500058H5.25781C5.666 0.500058 6 0.813276 6 1.19596V3.76909C6 4.15183 5.66595 4.465 5.25781 4.465H4.54041V3.23091C4.54041 2.6875 4.06623 2.24289 3.48668 2.24289H1.77149V1.1959C1.77149 0.813171 2.10554 0.5 2.51368 0.5L2.51353 0.500058Z"
-                          fill="#989EAE"
-                        />
-                      </svg>
-                    </div>
-
+                  <div className='bg-[#989EAE54] w-[25px] h-[25px] flex rounded-full items-center justify-center'>
+                    <svg
+                      width='13'
+                      height='13'
+                      viewBox='0 0 6 7'
+                      fill='none'
+                      xmlns='http://www.w3.org/2000/svg'
+                    >
+                      <path
+                        fill-rule='evenodd'
+                        clip-rule='evenodd'
+                        d='M0.742191 2.53506H3.48647C3.89466 2.53506 4.22866 2.84828 4.22866 3.23097V5.8041C4.22866 6.18683 3.89461 6.5 3.48647 6.5H0.742191C0.334001 6.5 0 6.18678 0 5.8041V3.23097C0 2.84823 0.334051 2.53506 0.742191 2.53506ZM2.51353 0.500058H5.25781C5.666 0.500058 6 0.813276 6 1.19596V3.76909C6 4.15183 5.66595 4.465 5.25781 4.465H4.54041V3.23091C4.54041 2.6875 4.06623 2.24289 3.48668 2.24289H1.77149V1.1959C1.77149 0.813171 2.10554 0.5 2.51368 0.5L2.51353 0.500058Z'
+                        fill='#989EAE'
+                      />
+                    </svg>
                   </div>
-                </JaggedBackgroundItem>
+                </div>
+              </JaggedBackgroundItem>
+            </div>
 
-                <button className="flex items-center bg-gradient-to-r from-[#DDB43F] to-[#9B7C25] text-white py-2 px-4 rounded-lg text-sm md:text-base font-semibold hover:scale-105 transition-all">
-                  <span>Register Instantly</span>
-                  <svg
-                    className="ml-2"
-                    width="12"
-                    height="18"
-                    viewBox="0 0 9 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+            <button className='flex w-[250px] gap-2 mt-10 items-center justify-center px-4 py-2 rounded-md font-medium text-white bg-[#DDB43F] hover:bg-[#9B7C25] outline-none transition'>
+              Claim Reward
+
+              <svg
+                width='10px'
+                height='15px'
+                viewBox='0 0 9 14'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <g filter='url(#filter0_d_2971_1731)'>
+                  <path
+                    fill-rule='evenodd'
+                    clip-rule='evenodd'
+                    d='M2.62792 10.3923C2.55824 10.4614 2.46502 10.5 2.36799 10.5C2.27095 10.5 2.17771 10.4614 2.10804 10.3923C2.07385 10.3583 2.04667 10.3176 2.02811 10.2727C2.00956 10.2278 2 10.1795 2 10.1307C2 10.0819 2.00956 10.0337 2.02811 9.98874C2.04667 9.94381 2.07385 9.90313 2.10804 9.86911L6.01976 5.93156L2.10923 2.13029C2.07517 2.09645 2.0481 2.05598 2.02961 2.01126C2.01112 1.96653 2.00158 1.91847 2.00158 1.86991C2.00158 1.82135 2.01112 1.77329 2.02961 1.72856C2.0481 1.68384 2.07517 1.64334 2.10923 1.6095C2.17834 1.53936 2.27179 1.5 2.36918 1.5C2.46656 1.5 2.56 1.53936 2.62911 1.6095L7 5.93156L2.62792 10.3923Z'
+                    fill='white'
+                    fill-opacity='0.75'
+                    shape-rendering='crispEdges'
+                  />
+                </g>
+                <defs>
+                  <filter
+                    id='filter0_d_2971_1731'
+                    x='0'
+                    y='0.5'
+                    width='9'
+                    height='13'
+                    filterUnits='userSpaceOnUse'
+                    color-interpolation-filters='sRGB'
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M2.62792 10.3923C2.55824 10.4614 2.46502 10.5 2.36799 10.5C2.27095 10.5 2.17771 10.4614 2.10804 10.3923C2.07385 10.3583 2.04667 10.3176 2.02811 10.2727C2.00956 10.2278 2 10.1795 2 10.1307C2 10.0819 2.00956 10.0337 2.02811 9.98874C2.04667 9.94381 2.07385 9.90313 2.10804 9.86911L6.01976 5.93156L2.10923 2.13029C2.07517 2.09645 2.0481 2.05598 2.02961 2.01126C2.01112 1.96653 2.00158 1.91847 2.00158 1.86991C2.00158 1.82135 2.01112 1.77329 2.02961 1.72856C2.0481 1.68384 2.07517 1.64334 2.10923 1.6095C2.17834 1.53936 2.27179 1.5 2.36918 1.5C2.46656 1.5 2.56 1.53936 2.62911 1.6095L7 5.93156L2.62792 10.3923Z"
-                      fill="white"
-                      fillOpacity="0.75"
+                    <feFlood flood-opacity='0' result='BackgroundImageFix' />
+                    <feColorMatrix
+                      in='SourceAlpha'
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                      result='hardAlpha'
                     />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div className="hidden lg:block w-[100%] h-full">
-              <Image
-                src={roobetDemo}
-                alt="Side Illustration"
-                className="h-full object-cover rounded-r-lg"
-              />
-            </div>
+                    <feOffset dy='1' />
+                    <feGaussianBlur stdDeviation='1' />
+                    <feComposite in2='hardAlpha' operator='out' />
+                    <feColorMatrix
+                      type='matrix'
+                      values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in2='BackgroundImageFix'
+                      result='effect1_dropShadow_2971_1731'
+                    />
+                    <feBlend
+                      mode='normal'
+                      in='SourceGraphic'
+                      in2='effect1_dropShadow_2971_1731'
+                      result='shape'
+                    />
+                  </filter>
+                </defs>
+              </svg>
+            </button>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center text-white overflow-hidden">
-
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-16 left-16 w-24 h-24 bg-indigo-600 opacity-20 rotate-45 transform -z-10" />
-              <div className="absolute bottom-24 right-20 w-36 h-36 bg-indigo-600 opacity-10 rotate-45 transform -z-10" />
-              <div className="absolute top-1/3 left-1/3 w-28 h-28 bg-indigo-600 opacity-5 rotate-45 transform -z-10" />
-            </div>
-
-            <div className="relative z-10 p-8 rounded-lg text-center">
-              <div className="flex flex-col items-center justify-center text-white">
-                <h1 className="text-4xl font-bold mt-24">High Roller Rewards</h1>
-                <p className="mt-4 text-lg text-center">
-                  Are you a High Roller? Make a ticket in our Discord and learn about our Exclusive VIP Rewards.
-                </p>
-                <Link
-                  href="https://discord.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 px-6 py-3 bg-[#26263A] rounded-md text-white flex items-center gap-2 hover:opacity-75 transition-all"
-                  style={{ textDecoration: 'none' }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 32 32"
-                    className="w-5 h-5"
-                    fill="currentColor"
-                  >
-                    <path d="M20.992 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.050 0.005 0.109 0.005 0.168 0 1.523-1.191 2.768-2.693 2.854l-0.008 0zM11.026 20.163c-1.511-0.099-2.699-1.349-2.699-2.877 0-0.051 0.001-0.102 0.004-0.153l-0 0.007c-0.003-0.048-0.005-0.104-0.005-0.161 0-1.525 1.19-2.771 2.692-2.862l0.008-0c1.509 0.082 2.701 1.325 2.701 2.847 0 0.062-0.002 0.123-0.006 0.184l0-0.008c0.003 0.048 0.005 0.104 0.005 0.161 0 1.525-1.19 2.771-2.692 2.862l-0.008 0zM26.393 6.465c-1.763-0.832-3.811-1.49-5.955-1.871l-0.149-0.022c-0.005-0.001-0.011-0.002-0.017-0.002-0.035 0-0.065 0.019-0.081 0.047l-0 0c-0.234 0.411-0.488 0.924-0.717 1.45l-0.043 0.111c-1.030-0.165-2.218-0.259-3.428-0.259s-2.398 0.094-3.557 0.275l0.129-0.017c-0.27-0.63-0.528-1.142-0.813-1.638l0.041 0.077c-0.017-0.029-0.048-0.047-0.083-0.047-0.005 0-0.011 0-0.016 0.001l0.001-0c-2.293 0.403-4.342 1.060-6.256 1.957l0.151-0.064c-0.017 0.007-0.031 0.019-0.040 0.034l-0 0c-2.854 4.041-4.562 9.069-4.562 14.496 0 0.907 0.048 1.802 0.141 2.684l-0.009-0.11c0.003 0.029 0.018 0.053 0.039 0.070l0 0c2.14 1.601 4.628 2.891 7.313 3.738l0.176 0.048c0.008 0.003 0.018 0.004 0.028 0.004 0.032 0 0.060-0.015 0.077-0.038l0-0c0.535-0.72 1.044-1.536 1.485-2.392l0.047-0.1c0.006-0.012 0.010-0.027 0.010-0.043 0-0.041-0.026-0.075-0.062-0.089l-0.001-0c-0.912-0.352-1.683-0.727-2.417-1.157l0.077 0.042c-0.029-0.017-0.048-0.048-0.048-0.083 0-0.031 0.015-0.059 0.038-0.076l0-0c0.157-0.118 0.315-0.24 0.465-0.364 0.016-0.013 0.037-0.021 0.059-0.021 0.014 0 0.027 0.003 0.038 0.008l-0.001-0c2.208 1.061 4.8 1.681 7.536 1.681s5.329-0.62 7.643-1.727l-0.107 0.046c0.012-0.006 0.025-0.009 0.040-0.009 0.022 0 0.043 0.008 0.059 0.021l-0-0c0.15 0.124 0.307 0.248 0.466 0.365 0.023 0.018 0.038 0.046 0.038 0.077 0 0.035-0.019 0.065-0.046 0.082l-0 0c-0.661 0.395-1.432 0.769-2.235 1.078l-0.105 0.036c-0.036 0.014-0.062 0.049-0.062 0.089 0 0.016 0.004 0.031 0.011 0.044l-0-0.001c0.501 0.96 1.009 1.775 1.571 2.548l-0.040-0.057c0.017 0.024 0.046 0.040 0.077 0.040 0.010 0 0.020-0.002 0.029-0.004l-0.001 0c2.865-0.892 5.358-2.182 7.566-3.832l-0.065 0.047c0.022-0.016 0.036-0.041 0.039-0.069l0-0c0.087-0.784 0.136-1.694 0.136-2.615 0-5.415-1.712-10.43-4.623-14.534l0.052 0.078c-0.008-0.016-0.022-0.029-0.038-0.036l-0-0z"></path>
-                  </svg>
-                  Join Server
-                </Link>
-              </div>
-            </div>
+          <div className='bg-gradient-to-b from-[#19182a] via-[#19182a] to-[transparent] p-2.5 rounded-lg'>
+            <img src='/img/img_1.png' width='100%' height='200' />
           </div>
+        </div>
 
+
+        <div className="mt-[100px] flex flex-col items-center text-center">
+          <h1 className="font-bold text-[36px]">
+            High Roller Rewards
+          </h1>
+
+          <p className="md:w-[500px] text-[#989EAE]">
+            Are you a High Roller? Make a ticket in our Discord and learn about our Exclusive VIP Rewards.
+          </p>
+
+          <button className="mt-7 font-medium px-5 py-3 rounded-lg flex items-center gap-3 bg-[#26263A]">
+            <svg width="17" height="15" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11.8519 1.41248C10.9441 0.983042 9.98619 0.676543 9.00205 0.500626C8.99314 0.499079 8.98398 0.500415 8.97583 0.504453C8.96768 0.508491 8.96095 0.515031 8.95655 0.523175C8.83318 0.748658 8.69668 1.04359 8.60131 1.27449C7.54048 1.10854 6.46142 1.10854 5.40059 1.27449C5.2942 1.01727 5.17385 0.766438 5.04009 0.523175C5.03561 0.51512 5.02886 0.508655 5.02074 0.504631C5.01261 0.500606 5.0035 0.49921 4.9946 0.500626C4.01023 0.675602 3.05212 0.982259 2.14475 1.41248C2.13699 1.41554 2.13049 1.42127 2.12638 1.42872C0.311645 4.22381 -0.186225 6.95036 0.0578972 9.64263C0.0587722 9.65526 0.0666471 9.66789 0.076272 9.676C1.13302 10.4829 2.31502 11.0989 3.57186 11.4979C3.58073 11.5008 3.59027 11.5007 3.59908 11.4976C3.60789 11.4945 3.61552 11.4886 3.62086 11.4808C3.89036 11.102 4.1301 10.7024 4.3366 10.2821C4.34091 10.2734 4.34238 10.2636 4.3408 10.254C4.33923 10.2444 4.33468 10.2356 4.32785 10.2289C4.32333 10.2245 4.31797 10.2211 4.3121 10.219C3.93512 10.0696 3.57002 9.8902 3.22011 9.68232C3.21034 9.67661 3.20307 9.66724 3.19981 9.65616C3.19656 9.64508 3.19756 9.63313 3.20261 9.62279C3.20559 9.61607 3.21009 9.6102 3.21574 9.60565C3.28924 9.54883 3.36274 9.4893 3.43274 9.42977C3.43892 9.42465 3.44634 9.42136 3.4542 9.42024C3.46206 9.41913 3.47007 9.42024 3.47736 9.42346C5.76896 10.5022 8.24956 10.5022 10.5132 9.42346C10.5207 9.42009 10.529 9.41889 10.5372 9.42C10.5454 9.42112 10.5531 9.42449 10.5595 9.42977C10.6295 9.4893 10.703 9.54883 10.7765 9.60565C10.7825 9.61014 10.7873 9.61608 10.7905 9.62294C10.7936 9.62979 10.7951 9.63736 10.7948 9.64495C10.7944 9.65255 10.7923 9.65994 10.7885 9.66646C10.7847 9.67298 10.7794 9.67843 10.773 9.68232C10.4239 9.8921 10.0584 10.0713 9.68017 10.2181C9.67414 10.2203 9.66866 10.2239 9.66412 10.2286C9.65959 10.2333 9.65611 10.2389 9.65392 10.2451C9.6519 10.2511 9.65109 10.2575 9.65154 10.2639C9.65199 10.2702 9.65369 10.2764 9.65655 10.2821C9.86654 10.7015 10.1072 11.102 10.3714 11.4808C10.3768 11.4886 10.3844 11.4945 10.3932 11.4976C10.402 11.5007 10.4115 11.5008 10.4204 11.4979C11.6794 11.1002 12.8633 10.484 13.9213 9.676C13.9266 9.67222 13.931 9.66726 13.9341 9.66148C13.9373 9.6557 13.9392 9.64926 13.9396 9.64263C14.2319 6.53006 13.4505 3.82606 11.8694 1.42962C11.8678 1.42566 11.8654 1.42209 11.8624 1.41914C11.8594 1.41619 11.8558 1.41392 11.8519 1.41248ZM4.67872 8.00291C3.98836 8.00291 3.42049 7.34992 3.42049 6.549C3.42049 5.74718 3.97786 5.09418 4.67872 5.09418C5.38484 5.09418 5.94746 5.75259 5.93696 6.549C5.93696 7.34992 5.37959 8.00291 4.67872 8.00291ZM9.33017 8.00291C8.64068 8.00291 8.07194 7.34992 8.07194 6.549C8.07194 5.74718 8.62931 5.09418 9.33017 5.09418C10.0363 5.09418 10.5998 5.75259 10.5884 6.549C10.5884 7.34992 10.0363 8.00291 9.33017 8.00291Z"
+                fill="white" />
+            </svg>
+            Join Server
+          </button>
         </div>
       </div>
     </Layout>
