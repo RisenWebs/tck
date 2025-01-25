@@ -1,11 +1,109 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout/Layout";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import GameCard from "@/components/Hunt/GameCard";
+import axios from 'axios';
+
+type HuntData = {
+	id: number;
+	uuid: string;
+	name: string;
+	bonusCountOpened: number;
+	bonusCountRemaining: number;
+	bonusCountTotal: number;
+	date: string;
+	x100Wins: number;
+	avgPerBonus: string;
+	avgBetSize: string;
+	avgPayout: string;
+	infoStartCost: string;
+	infoAmountWon: string;
+	infoHighestPayout: string;
+	infoHighestMulti: string;
+	infoRunningAverage: string;
+	infoRequiredAverage: string;
+}[];
+
+type bonusData = {
+	id: number;
+	name: string;
+	note: string | null;
+	active: number;
+	providerId: number;
+	provider_name: string;
+	bet_size: string;
+	multiplier: string;
+	payout: string;
+	betSizeRaw: number;
+	multiplierRaw: number;
+	payoutRaw: number;
+	timestamp: string;
+}[];
+
+type stats = {
+	total_bonuses: number;
+	current_bonus: number;
+	total_win: string;
+	date: string;
+	win_bonus: string;
+	x100_wins: number;
+	avg_betsize: string;
+	avg_payout: string;
+	avg_multi: string;
+	avg_required: string;
+};
 
 export default function HuntTracker() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [prediction, setPrediction] = useState<"yes" | "no">("yes");
+	//const [huntData, setHuntData] = useState<HuntData>([]);
+	const [bonusData, setBonusData] = useState<bonusData>([]);
+	const [stats, setStats] = useState<Partial<stats>>({});
+	const [searchQuery, setSearchQuery] = useState('');
+	const [showSearch, setShowSearch] = useState(false);
+	const [activeDay, setActiveDay] = useState(0);
+
+	const API_BASE = `https://bht.bet/api/n7wx3ERhW6MHM9sks59sJR2fzvDHpMP9`;
+	const endpoints = [
+		{ name: "bonuses", endpoint: "/bonuses", setter: setBonusData },
+		{ name: "stats", endpoint: "/stats", setter: setStats },
+	];
+
+	const fetchData = async (endpoint: string, setter: React.Dispatch<React.SetStateAction<any>>) => {
+		try {
+			const { data } = await axios.get(`${API_BASE}${endpoint}`);
+			setter(data);
+		} catch (error: any) {
+			console.error(`Error fetching data from ${endpoint}:`, error.message || error);
+		}
+	};
+
+	useEffect(() => {
+		endpoints.forEach(({ endpoint, setter }) => fetchData(endpoint, setter));
+	}, []);
+
+	//score of how much it matches based on length of substring matched compared to total length
+	const getMatchScore = (field: string | null | undefined, query: string): number =>
+		field?.toLowerCase().includes(query.toLowerCase()) ? query.length / field.length : 0;
+
+
+	//if showSearch is true, filter the bonusData array based on the searchQuery if not return the bonusData if searchQury is empty it will return bonusData else return the filtered array
+	const filteredBonusData = showSearch ? searchQuery.trim() ? bonusData.filter((bonus) => {
+		const fieldsToCheck = [
+			bonus.name,
+			bonus.note,
+			bonus.provider_name,
+			bonus.bet_size,
+			bonus.multiplier,
+			bonus.payout,
+			bonus.timestamp,
+		];
+
+		const totalScore = fieldsToCheck.reduce((score, field) => score + getMatchScore(field, searchQuery), 0);
+
+		return totalScore > 0;
+	}) : bonusData : bonusData;
+
 
 	const yesVotes = 104;
 	const noVotes = 486;
@@ -13,132 +111,15 @@ export default function HuntTracker() {
 	const yesPercent = ((yesVotes / totalVotes) * 100).toFixed(1) + "%";
 	const noPercent = ((noVotes / totalVotes) * 100).toFixed(1) + "%";
 
-	const openModal = () => setIsModalOpen(true);
-	const closeModal = () => setIsModalOpen(false);
-
-	// Example table data
-	const tableData = [
-		{
-			id: 1,
-			slot: "Eye of Cleopatra",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 2,
-			slot: "Book of Vikings",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 3,
-			slot: "Bounty Gold",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 4,
-			slot: "Heart of Rio",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 5,
-			slot: "Mysterious Egypt",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 6,
-			slot: "Joker King",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 7,
-			slot: "Return of the Dead",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 8,
-			slot: "Wild Walker",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 9,
-			slot: "Vampires vs Wolves",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 10,
-			slot: "Break Bones",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 11,
-			slot: "Break Bones",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 12,
-			slot: "Break Bones",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 13,
-			slot: "Break Bones",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-		{
-			id: 14,
-			slot: "Break Bones",
-			provider: "Pragmatic Play",
-			bet: "$10",
-			multi: "51.00x",
-			win: "$800.39",
-		},
-	];
+	const toggleModal = () => setIsModalOpen((prev) => !prev);
 
 	const days = [
-		{ label: "S", fraction: "6/6", active: true },
-		{ label: "F", fraction: "5/6", active: false },
-		{ label: "T", fraction: "4/6", active: false },
-		{ label: "W", fraction: "3/6", active: false },
-		{ label: "T", fraction: "2/6", active: false },
-		{ label: "M", fraction: "1/6", active: false },
+		{ label: "S", fraction: "6/6" },
+		{ label: "F", fraction: "5/6" },
+		{ label: "T", fraction: "4/6" },
+		{ label: "W", fraction: "3/6" },
+		{ label: "T", fraction: "2/6" },
+		{ label: "M", fraction: "1/6" },
 	];
 
 	return (
@@ -221,7 +202,7 @@ export default function HuntTracker() {
 							</div>
 
 							<button
-								onClick={openModal}
+								onClick={toggleModal}
 								className="bg-gradient-to-r from-[#18A9FF] to-[#7E06FF] text-white font-medium py-1.5 px-6 rounded hover:opacity-90 transition"
 							>
 								Predict
@@ -236,11 +217,11 @@ export default function HuntTracker() {
 							{days.map((day, idx) => (
 								<div
 									key={idx}
-									className={`flex flex-col items-center justify-center w-10 h-14 rounded ${
-										day.active
-											? "bg-gradient-to-b from-[#26263A] to-[#26263A00]"
-											: ""
-									}`}
+									onClick={() => setActiveDay(idx)}
+									className={`flex flex-col items-center justify-center w-10 h-14 rounded cursor-pointer ${idx === activeDay
+										? "bg-gradient-to-b from-[#26263A] to-[#26263A00]"
+										: ""
+										}`}
 								>
 									<span className="text-xs font-semibold">{day.label}</span>
 									<span className="text-[10px] text-gray-400">
@@ -252,60 +233,71 @@ export default function HuntTracker() {
 
 						{/* Stats list */}
 						<div className="flex flex-col space-y-2.5 max-h-[200px] overflow-y-auto scrollbar-hide">
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Total Bonuses</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									69
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Current Bonus</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									69
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Total Win</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									$3,150.500
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Date</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									19/06/2022
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Win/Bonus</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									$548.00
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">100x Wins</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									69
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Average Bet</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									$500
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Average Win</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									$100
-								</span>
-							</div>
-							<div className="flex items-center justify-between">
-								<span className="text-[13px] font-medium">Average Multi</span>
-								<span className="text-[13px] font-medium text-[#989EAE]">
-									100.49x
-								</span>
-							</div>
+							{Object.keys(stats).length === 0 ? (
+								Array.from({ length: 9 }).map((_, idx) => (
+									<div key={idx} className="flex items-center justify-between animate-pulse">
+										<span className="h-4 w-24 bg-[#2A2D3E] rounded"></span>
+										<span className="h-4 w-16 bg-[#2A2D3E] rounded"></span>
+									</div>
+								))
+							) : (
+								<>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Total Bonuses</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.total_bonuses}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Current Bonus</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.current_bonus}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Total Win</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.total_win}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Date</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.date}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Win/Bonus</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.win_bonus}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">100x Wins</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.x100_wins}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Average Bet</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.avg_betsize}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Average Win</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.avg_payout}
+										</span>
+									</div>
+									<div className="flex items-center justify-between">
+										<span className="text-[13px] font-medium">Average Multi</span>
+										<span className="text-[13px] font-medium text-[#989EAE]">
+											{stats.avg_multi}
+										</span>
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -336,16 +328,19 @@ export default function HuntTracker() {
 							{/* Mobile input (shown on small screens) */}
 							<input
 								type="text"
+								onChange={(e) => setSearchQuery(e.target.value)}
+								value={searchQuery}
 								placeholder="Search for a Slo..."
-								className="bg-transparent text-white placeholder-[#989EAE] text-sm p-2 rounded w-24 focus:outline-none 
+								className="bg-transparent text-white placeholder-[#989EAE54] text-sm p-2 rounded w-24 focus:outline-none 
                  block sm:hidden"
 							/>
 
 							{/* Desktop input (hidden on small screens, shown on sm+) */}
 							<input
 								type="text"
+								onChange={(e) => setSearchQuery(e.target.value)}
 								placeholder="Search for a Slot or a Provider..."
-								className="bg-transparent text-white placeholder-[#989EAE] text-sm p-2 rounded w-60 focus:outline-none 
+								className="bg-transparent text-white placeholder-[#989EAE54] text-sm p-2 rounded w-60 focus:outline-none 
                  hidden sm:block"
 							/>
 						</div>
@@ -353,7 +348,16 @@ export default function HuntTracker() {
 						{/* Right side: results toggle */}
 						<div className="flex items-center space-x-2 text-sm text-[#989EAE]">
 							<span>Results</span>
-							<input type="checkbox" className="form-checkbox text-[#18A9FF]" />
+							<div onClick={() => setShowSearch(!showSearch)} className="relative inline-flex items-center">
+								<input
+									onChange={(e) => setShowSearch(e.target.checked)}
+									checked={showSearch}
+									type="checkbox"
+									className="sr-only peer"
+								/>
+								<div className="w-10 h-5 cursor-pointer bg-[#0B0B13] peer-focus:ring-2 peer-focus:ring-[#1f1f1f] rounded-full peer-checked:bg-[#1f1f1f] transition-all"></div>
+								<div className="absolute cursor-pointer left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+							</div>
 						</div>
 					</div>
 
@@ -363,27 +367,44 @@ export default function HuntTracker() {
 						<div className="max-h-full overflow-x-auto overflow-y-auto scrollbar-hide">
 							<table className="w-full text-sm text-left text-gray-200">
 								<tbody>
-									{tableData.map((row, idx) => {
-										const rowBg = idx % 2 === 0 ? "#161625" : "#0B0B1780";
-										return (
-											<tr key={row.id} style={{ backgroundColor: rowBg }}>
-												<td className="px-4 py-3 hidden md:table-cell text-[#989EAE] font-[800]">
-													{row.id}
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													{row.slot}
-												</td>
-												<td className="px-4 py-3 text-[#989EAE]">
-													{row.provider}
-												</td>
-												<td className="px-4 py-3 text-[#989EAE]">{row.bet}</td>
-												<td className="px-4 py-3 text-[#989EAE]">
-													{row.multi}
-												</td>
-												<td className="px-4 py-3">{row.win}</td>
-											</tr>
-										);
-									})}
+									{bonusData.length <= 0
+										? Array.from({ length: 10 }).map((_, idx) => {
+											const rowBg = idx % 2 === 0 ? "#161625" : "#0B0B1780";
+											return (
+												<tr key={idx} style={{ backgroundColor: rowBg }}>
+													<td className="px-4 py-3 hidden md:table-cell text-[#989EAE] animate-pulse">
+														<div className="h-4 w-8 bg-[#2A2D3E] rounded"></div>
+													</td>
+													<td className="px-4 py-3 whitespace-nowrap animate-pulse">
+														<div className="h-4 w-20 bg-[#2A2D3E] rounded"></div>
+													</td>
+													<td className="px-4 py-3 text-[#989EAE] animate-pulse">
+														<div className="h-4 w-28 bg-[#2A2D3E] rounded"></div>
+													</td>
+													<td className="px-4 py-3 text-[#989EAE] animate-pulse">
+														<div className="h-4 w-16 bg-[#2A2D3E] rounded"></div>
+													</td>
+													<td className="px-4 py-3 text-[#989EAE] animate-pulse">
+														<div className="h-4 w-12 bg-[#2A2D3E] rounded"></div>
+													</td>
+												</tr>
+											);
+										})
+										: filteredBonusData.map((row, idx) => {
+											const rowBg = idx % 2 === 0 ? "#161625" : "#0B0B1780";
+											return (
+												<tr key={row.id} style={{ backgroundColor: rowBg }}>
+													<td className="px-4 py-3 hidden md:table-cell text-[#989EAE] font-extrabold">
+														{row.id}
+													</td>
+													<td className="px-4 py-3 whitespace-nowrap">{row.name}</td>
+													<td className="px-4 py-3 text-[#989EAE]">{row.provider_name}</td>
+													<td className="px-4 py-3 text-[#989EAE]">{row.bet_size}</td>
+													<td className="px-4 py-3 text-[#989EAE]">{row.multiplier}</td>
+													<td className="px-4 py-3">{row.payout}</td>
+												</tr>
+											);
+										})}
 								</tbody>
 							</table>
 						</div>
@@ -424,7 +445,7 @@ export default function HuntTracker() {
 			{isModalOpen && (
 				<div
 					className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
-					onClick={closeModal}
+					onClick={toggleModal}
 				>
 					<div
 						className="relative w-[420px] max-w-full bg-[#161625] rounded-lg p-5"
@@ -435,7 +456,7 @@ export default function HuntTracker() {
 								Prediction
 							</span>
 							<button
-								onClick={closeModal}
+								onClick={toggleModal}
 								className="text-gray-400 hover:text-gray-200"
 								aria-label="Close Modal"
 							>
