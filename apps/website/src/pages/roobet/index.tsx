@@ -799,7 +799,7 @@ function Roobet() {
         </div>
 
 
-        <div className="mt-[100px] flex flex-col items-center text-center">
+        <div className="mt-[150px] flex flex-col items-center text-center">
           <h1 className="font-bold text-[36px]">
             High Roller Rewards
           </h1>
@@ -817,6 +817,8 @@ function Roobet() {
             Join Server
           </button>
         </div>
+
+        <div className="mt-[100px]"></div>
       </div>
     </Layout>
   );
