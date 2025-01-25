@@ -63,7 +63,7 @@ export default function HuntTracker() {
 	const [showSearch, setShowSearch] = useState(false);
 	const [activeDay, setActiveDay] = useState(0);
 
-	const API_BASE = `https://bht.bet/api/n7wx3ERhW6MHM9sks59sJR2fzvDHpMP9`;
+	const API_BASE = `API BASE URL GOES HERE`; //eg https://bht.bet/api/TOKEN
 	const endpoints = [
 		{ name: "bonuses", endpoint: "/bonuses", setter: setBonusData },
 		{ name: "stats", endpoint: "/stats", setter: setStats },
