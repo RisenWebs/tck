@@ -20,6 +20,7 @@ export * from './functions/user/fetch';
 export * from './functions/user/points';
 export * from './functions/user/user';
 export * from './functions/user/wallets';
+export * from './functions/raffles';
 
 
 if (process.env.NODE_ENV !== 'development') {
