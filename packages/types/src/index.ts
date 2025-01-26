@@ -8,3 +8,5 @@ export * from './types/packdraw';
 export * from './types/roobet';
 export * from './types/theme';
 export * from './types/user';
+export * from './types/hunt';
+export * from './types/raffles';

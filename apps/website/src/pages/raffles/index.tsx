@@ -1,14 +1,13 @@
 import { getAllRaffles } from 'database'; // updated import
-import { ISafeRaffle } from '../../types/raffles';
 import { IconHistoryToggle } from '@tabler/icons-react';
+import { GetServerSideProps } from 'next';
 
 import Layout from '@/components/Layout/Layout';
 import PageHeader from '@/components/PageHeader/PageHeader';
-// Update path if needed for your RaffleBox component
 import RaffleBox from '@/components/Raffles/RaffleBox';
+import { ISafeRaffle } from 'types';
 
-export async function getServerSideProps() {
-  // Use getAllRaffles to retrieve current and past raffles
+export const getServerSideProps: GetServerSideProps = async () => {
   const raffles = await getAllRaffles();
 
   return {
