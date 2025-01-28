@@ -11,9 +11,9 @@ import Jagged from '@/components/svg/Jagged';
 import BoxBadge from '@/components/BoxBadge/BoxBadge';
 
 import { useAuth } from '@/hooks/auth';
-import { ISafeRaffle } from '../../types/raffles';
 
 import raffleCoinImage from '@/images/giveaway-coin.png';
+import { ISafeRaffle } from 'types';
 
 interface RaffleBoxProps {
   raffle: ISafeRaffle;
@@ -23,9 +23,8 @@ function RaffleBox({ raffle }: RaffleBoxProps) {
   const router = useRouter();
   const auth = useAuth();
   const [isEntered, setIsEntered] = useState(false);
-
-  // Check if there is at least one winner
   const hasWinners = raffle.winners && raffle.winners.length > 0;
+  const hasEnded = raffle.timestampEnd < new Date().getTime();
 
   useEffect(() => {
     setIsEntered(
@@ -35,15 +34,25 @@ function RaffleBox({ raffle }: RaffleBoxProps) {
     );
   }, [auth, raffle.entries]);
 
-  // Number of days from now until raffle.timestampEnd
-  const daysDifference = Math.floor(
-    (raffle.timestampEnd - Date.now()) / 1000 / 60 / 60 / 24
-  );
+  const secondsDifference = Math.floor((new Date(raffle.timestampEnd).getTime() - new Date().getTime()) / 1000);
+
+  const getTimeText = (seconds: number) => {
+    const absSeconds = Math.abs(seconds);
+    const days = Math.floor(absSeconds / 86400);
+    const hours = Math.floor((absSeconds % 86400) / 3600);
+    const minutes = Math.floor((absSeconds % 3600) / 60);
+    const remainingSeconds = absSeconds % 60;
+
+    if (days > 0) return `${days} day${days !== 1 ? 's' : ''}`;
+    if (hours > 0) return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    if (minutes > 0) return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    return `${remainingSeconds} second${remainingSeconds !== 1 ? 's' : ''}`;
+  };
 
   return (
     <div className="relative w-[308px] rounded-[8px]">
       {/* Show 'ENTERED' badge if user is in raffle and there are no winners yet */}
-      {isEntered && !hasWinners && (
+      {isEntered && !hasEnded && (
         <BoxBadge>ENTERED</BoxBadge>
       )}
 
@@ -70,29 +79,24 @@ function RaffleBox({ raffle }: RaffleBoxProps) {
           <p className="text-lg font-bold text-white">
             {raffle.name}
           </p>
-          <p className="text-sm text-gray-400">
-            {raffle.brand}
-          </p>
         </div>
 
         <div className="w-full flex flex-col items-center gap-[10px]">
           <Button
             rightIcon={faAngleRight}
-            variant={hasWinners ? 'secondary' : 'gradient'}
+            variant={hasEnded ? 'secondary' : 'gradient'}
             fullWidth
             onClick={() => router.push(`/raffles/${raffle.id}`)}
           >
             View Raffle
           </Button>
           <p className="text-sm text-gray-400 uppercase">
-            end
-            {hasWinners ? 'ed' : 's'} {!hasWinners && 'in'}{' '}
-            {hasWinners
-              ? Math.abs(daysDifference)
-              : daysDifference}{' '}
-            day{Math.abs(daysDifference) !== 1 && 's'}
-            {hasWinners && ' ago'}
+            {hasEnded ?
+              `Ended ${getTimeText(secondsDifference)} ago` :
+              `Ends in ${getTimeText(secondsDifference)}`
+            }
           </p>
+
         </div>
       </div>
 

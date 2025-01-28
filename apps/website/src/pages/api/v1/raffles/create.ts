@@ -13,16 +13,12 @@ export const config = {
 };
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('Received request to create raffle');
-
-  // CORS
   await NextCors(req, res, {
-    methods: ['POST'],
+    methods: ['POST', 'OPTIONS'],
     origin: '*',
     optionsSuccessStatus: 200
   });
-
-  // Extract IP + authorization
+  
   const ip = getIp(req);
   console.log('Client IP:', ip);
 

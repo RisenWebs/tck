@@ -9,10 +9,9 @@ import { ISafeRaffle } from 'types';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const raffles = await getAllRaffles();
-
   return {
     props: {
-      raffles,
+      raffles
     },
   };
 }
@@ -25,6 +24,8 @@ function Raffles({
     pastRaffles: ISafeRaffle[];
   };
 }) {
+
+  console.log(raffles)
   return (
     <Layout title="Raffles">
       {/* Root container (was .root) */}

@@ -51,6 +51,7 @@ enum Permission {
   USER_VIEW_CONNECTIONS
   USER_VIEW_WALLET
   MANAGE_CLIPS
+  MANAGE_CACHE
 }
 
 enum Platform {
@@ -65,6 +66,76 @@ enum VoteType {
   UPVOTE
   DOWNVOTE
 }
+
+model UnifiedCache {
+  id           String     @id @default(cuid()) @map("_id")
+  bestPayoutId String     @unique
+  bestMultiId  String     @unique
+  updatedAt    DateTime   @updatedAt
+
+  bestPayout   BestPayout @relation(fields: [bestPayoutId], references: [id], onDelete: Cascade)
+  bestMulti    BestMulti  @relation(fields: [bestMultiId], references: [id], onDelete: Cascade)
+  bonus        Bonus[]
+  hunt         Hunt[]
+
+  @@index([id, updatedAt])
+}
+
+model BestPayout {
+  id          String         @id @default(cuid()) @map("_id")
+  slotName    String
+  betSize     Float
+  payout      Float
+  multiplier  Float
+  timestamp   DateTime
+
+  unifiedCache UnifiedCache? @relation
+  @@index([slotName, timestamp])
+}
+
+model BestMulti {
+  id          String         @id @default(cuid()) @map("_id")
+  slotName    String
+  betSize     Float
+  payout      Float
+  multiplier  Float
+
+  unifiedCache UnifiedCache? @relation
+  @@index([slotName])
+}
+
+model Bonus {
+  id             String         @id @default(cuid()) @map("_id")
+  name           String
+  note           String
+  active         Boolean
+  providerId     Int
+  providerName   String
+  betSize        Float
+  multiplier     Float
+  payout         Float
+  betSizeRaw     Float
+  multiplierRaw  Float
+  payoutRaw      Float
+
+  unifiedCache UnifiedCache? @relation
+  @@index([providerId, active])
+}
+
+model Hunt {
+  id               String         @id @default(cuid()) @map("_id")
+  name             String
+  date             DateTime
+  totalBets        Int
+  totalWins        Int
+  runningAvg       Float
+  highestPayout    Float
+  highestMultiplier Float
+
+  unifiedCache UnifiedCache? @relation
+  @@index([date])
+}
+
 
 model Vote {
   id        String   @id @default(cuid()) @map("_id")

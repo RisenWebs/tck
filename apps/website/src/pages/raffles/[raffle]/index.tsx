@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { getGiveaway } from 'database';
-import { ISafeGiveaway } from 'types';
+import { getRaffle } from 'database';
+import { ISafeRaffle } from 'types';
 import { faChevronLeft, faTicket } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,31 +13,32 @@ import GiveawayEntry from '@/components/giveaway/GiveawayEntry/GiveawayEntry';
 import IconBubble from '@/components/ui/IconBubble/IconBubble';
 import JaggedBackgroundItem from '@/components/JaggedBackgroundItem/JaggedBackgroundItem';
 import { useAuth } from '@/hooks/auth';
+import RaffleInfobox from '@/components/Raffles/RaffleInfoBox';
 
 export async function getServerSideProps(ctx: any) {
-  const { giveaway } = ctx.params;
-  const fetchedGiveaway = await getGiveaway(giveaway);
+  const { raffle } = ctx.params;
+  const fetchedRaffle = await getRaffle(raffle);
 
-  if (!fetchedRaffles) 
-    return { redirect: { destination: '/raffle' } };
+  if (!fetchedRaffle) 
+    return { redirect: { destination: '/raffles' } };
 
-  return { props: { giveaway: fetchedRaffles } };
+  return { props: { raffle: fetchedRaffle } };
 }
 
-export default function RafflesPage({ raffle }: { raffle: ISafeGiveaway }) {
+export default function RafflesPage({ raffle }: { raffle: ISafeRaffle }) {
   const auth = useAuth();
   const [myEntry, setMyEntry] = useState(-1);
-  const [winnerOverlayOpen, setWinnerOverlayOpen] = useState(!!raffle.winner);
+  const [winnerOverlayOpen, setWinnerOverlayOpen] = useState(raffle.winners.length > 0);
 
   useEffect(() => {
     const userEntry = raffle.entries.find(e => e.username === auth.user?.username);
     setMyEntry(userEntry ? userEntry.slot + 1 : -1);
-  }, [auth, raffle.entries]);
+  }, [auth.user?.username, raffle.entries]);
 
   return (
     <Layout className="flex gap-4 flex-col lg:flex-row">
       <div className="w-full lg:w-[308px] flex flex-col gap-4">
-        <GiveawayInfobox giveaway={raffle} />
+        <RaffleInfobox raffle={raffle} />
         {myEntry > -1 && (
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-[#989eae] font-extrabold text-[14px] [text-shadow:0_4px_4px_rgba(0,0,0,0.05)]">
@@ -55,25 +56,37 @@ export default function RafflesPage({ raffle }: { raffle: ISafeGiveaway }) {
       <div
         className={clsx(
           "scrollbar-hide relative flex-grow rounded-lg min-h-[300px] max-h-[900px] overflow-y-scroll bg-[radial-gradient(94.58%_94.58%_at_50%_5.42%,_rgba(29,29,47,0.20)_0%,_rgba(0,0,0,0)_100%,_rgba(22,22,37,0)_100%),_rgba(22,22,37,0.50)] shadow-[0_2px_0_0_rgba(0,0,0,0.33)] backdrop-blur-[45px] lg:max-h-[500px]",
-          winnerOverlayOpen && raffle.winner && "overflow-y-hidden"
+           winnerOverlayOpen && raffle.winners.length > 0 && "overflow-y-hidden"
         )}
       >
-        {winnerOverlayOpen && raffle.winner && (
+        {winnerOverlayOpen && raffle.winners.length > 0 && (
           <div className="absolute z-[1] w-full h-[900px] flex flex-col items-center justify-center gap-16 bg-[rgba(22,22,37,0.66)] backdrop-blur-[10px] overflow-hidden">
-            <div className="flex flex-col items-center justify-center gap-4">
-              <Avatar style={{ border: '4px solid #131320', backgroundColor: 'rgba(38, 38, 58, 0.75)', borderRadius: '50%' }} h={100} w={100} className="text-4xl">
-                {raffle.winner.toUpperCase().charAt(0)}
-              </Avatar>
-
-              <p className="text-white font-extrabold text-[22px]">{raffle.winner}</p>
-
-              <JaggedBackgroundItem fill="#26263A">
-                <p className="text-[#9391C9] font-bold text-[18px]">
-                  Ticket #{(raffle.entries.find(entry => entry.username === raffle.winner)?.slot + 1).toLocaleString('en-US')}
-                </p>
-
-              </JaggedBackgroundItem>
-            </div>
+           <div className="flex flex-wrap justify-center gap-8">
+                {raffle.winners.map((winner, index) => {
+                  const winnerEntry = raffle.entries.find(entry => entry.username === winner);
+                  return (
+                    <div key={winner} className="flex flex-col items-center gap-2">
+                      <Avatar 
+                        style={{ 
+                          border: '4px solid #131320', 
+                          backgroundColor: 'rgba(38, 38, 58, 0.75)', 
+                          borderRadius: '50%' 
+                        }} 
+                        h={100} 
+                        w={100}
+                      >
+                        {winner.toUpperCase().charAt(0)}
+                      </Avatar>
+                      <p className="text-white font-extrabold text-[18px]">{winner}</p>
+                      <JaggedBackgroundItem fill="#26263A">
+                        <p className="text-[#9391C9] font-bold text-[14px]">
+                          Ticket #{(winnerEntry?.slot ?? -1 + 1).toLocaleString('en-US')}
+                        </p>
+                      </JaggedBackgroundItem>
+                    </div>
+                  );
+                })}
+              </div>
             
             <div onClick={() => setWinnerOverlayOpen(false)} className="flex items-center justify-center gap-2 cursor-pointer">
               <FontAwesomeIcon icon={faChevronLeft} className="[width:9px] [height:9px] text-[rgba(147,145,201,0.75)] [filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.04))]" />
