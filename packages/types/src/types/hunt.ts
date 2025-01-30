@@ -34,3 +34,27 @@ export type bonusData = {
 	payoutRaw: number;
 	timestamp: string;
 }[];
+
+export type HuntDataField = string | number;
+
+export interface ProcessedHuntData {
+    label: string;
+    date: string;
+    data: Record<string, HuntDataField>;
+}
+
+export const DEFAULT_HUNT_VALUES = {
+    bonus_count_opened: '-',
+    bonus_count_remaining: '-',
+    bonus_count_total: '-',
+    x100_wins: '-',
+    avg_per_bonus: '-',
+    avg_betsize: '-',
+    avg_payout: '-',
+    info_start_cost: '-',
+    info_amount_won: '-',
+    info_highest_payout: '-',
+    info_highest_multi: '-',
+    info_running_average: '-',
+    info_required_average: '-',
+};
