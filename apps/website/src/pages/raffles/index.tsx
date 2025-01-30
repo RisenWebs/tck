@@ -24,8 +24,6 @@ function Raffles({
     pastRaffles: ISafeRaffle[];
   };
 }) {
-
-  console.log(raffles)
   return (
     <Layout title="Raffles">
       {/* Root container (was .root) */}
