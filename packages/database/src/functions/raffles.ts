@@ -165,7 +165,6 @@ export async function createRaffle(
 
     console.log('Raffle created successfully:', raffle);
 
-    // Log the creation as a user action.
     await prisma.userAction.create({
       data: {
         user: {
@@ -173,25 +172,16 @@ export async function createRaffle(
             id: userId
           }
         },
-        action: Action.RAFFLE_CREATE, // or your custom action enum key
+        action: Action.RAFFLE_CREATE,
         ip,
         timestamp: Date.now(),
         description: `Raffle ${raffle.id} created`
       }
     });
 
-    // Notify via socket (like Discord or internal notification).
     socket.emit('newRaffle', raffle);
     console.log('Socket notification sent for raffle:', raffle.id);
 
-    // Schedule raffle end.
-    const timeout = timestampEnd - Date.now();
-    setTimeout(async () => {
-      console.log('Ending raffle:', raffle.id);
-      await endRaffle(raffle.id);
-    }, timeout);
-
-    console.log('Set timeout to end raffle in', timeout, 'milliseconds');
   } catch (error) {
     console.error('Error creating raffle:', error);
   }

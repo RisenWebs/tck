@@ -23,15 +23,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!raffleData?.value) return res.status(404).json({ error: 'Raffle not found' });
 
   if (user.points < raffleData.value) {
-    return res.status(403).json({ error: 'Insufficient balance for raffle entry' });
+    console.log(user.points, raffleData.value);
+    return res.status(402).json({ error: 'Insufficient balance for raffle entry' });
   }
 
   try {
     const ip = getIp(req);
-    await removePoints(user.id, raffleData.value, ip, 'raffle-system');
     const success = await enterRaffle(user, raffle, ip);
+
+    if(success) 
+      await removePoints(user.id as string, raffleData.value, ip, 'raffle-system');
+    
     return res.status(success ? 200 : 500).end();
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: 'Transaction failed' });
   }
 }

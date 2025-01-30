@@ -3,70 +3,22 @@ import Layout from "@/components/Layout/Layout";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import GameCard from "@/components/Hunt/GameCard";
 import axios from 'axios';
-
-type HuntData = {
-	id: number;
-	uuid: string;
-	name: string;
-	bonusCountOpened: number;
-	bonusCountRemaining: number;
-	bonusCountTotal: number;
-	date: string;
-	x100Wins: number;
-	avgPerBonus: string;
-	avgBetSize: string;
-	avgPayout: string;
-	infoStartCost: string;
-	infoAmountWon: string;
-	infoHighestPayout: string;
-	infoHighestMulti: string;
-	infoRunningAverage: string;
-	infoRequiredAverage: string;
-}[];
-
-type bonusData = {
-	id: number;
-	name: string;
-	note: string | null;
-	active: number;
-	providerId: number;
-	provider_name: string;
-	bet_size: string;
-	multiplier: string;
-	payout: string;
-	betSizeRaw: number;
-	multiplierRaw: number;
-	payoutRaw: number;
-	timestamp: string;
-}[];
-
-type stats = {
-	total_bonuses: number;
-	current_bonus: number;
-	total_win: string;
-	date: string;
-	win_bonus: string;
-	x100_wins: number;
-	avg_betsize: string;
-	avg_payout: string;
-	avg_multi: string;
-	avg_required: string;
-};
+import { huntData, bonusData, ProcessedHuntData, DEFAULT_HUNT_VALUES } from "types";
 
 export default function HuntTracker() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [prediction, setPrediction] = useState<"yes" | "no">("yes");
-	//const [huntData, setHuntData] = useState<HuntData>([]);
+	const [huntData, setHuntData] = useState<huntData[]>([]);
 	const [bonusData, setBonusData] = useState<bonusData>([]);
-	const [stats, setStats] = useState<Partial<stats>>({});
+	const [processedHunt, setProcessedHunt] = useState<ProcessedHuntData[]>([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [showSearch, setShowSearch] = useState(false);
 	const [activeDay, setActiveDay] = useState(0);
 
-	const API_BASE = `API BASE URL GOES HERE`; //eg https://bht.bet/api/TOKEN
+	const API_BASE = `https://bht.bet/api/n7wx3ERhW6MHM9sks59sJR2fzvDHpMP9`; //eg https://bht.bet/api/TOKEN
 	const endpoints = [
 		{ name: "bonuses", endpoint: "/bonuses", setter: setBonusData },
-		{ name: "stats", endpoint: "/stats", setter: setStats },
+		{ name: "hunts", endpoint: "/hunts", setter: setHuntData }
 	];
 
 	const fetchData = async (endpoint: string, setter: React.Dispatch<React.SetStateAction<any>>) => {
@@ -81,6 +33,49 @@ export default function HuntTracker() {
 	useEffect(() => {
 		endpoints.forEach(({ endpoint, setter }) => fetchData(endpoint, setter));
 	}, []);
+
+	useEffect(() => {
+		const processHuntData = (hunts: huntData[]): ProcessedHuntData[] => {
+			const groupedWeeks = hunts
+				.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+				.reduce((acc: Record<string, huntData>, hunt) => {
+					const weekday = new Date(hunt.date).toLocaleDateString('en-US', { weekday: 'short' })[0];
+					acc[weekday] = hunt;
+					return acc;
+				}, {});
+
+			return ['S', 'F', 'TH', 'W', 'T', 'M'].map(label => {
+				const hunt = groupedWeeks[label] || {};
+				const hasData = Boolean(hunt.date);
+
+				return {
+					label,
+					date: hasData
+						? new Intl.DateTimeFormat('en-US', { month: '2-digit', day: '2-digit' }).format(new Date(hunt.date))
+						: '-',
+					data: hasData
+						? {
+							bonus_count_opened: hunt.bonus_count_opened,
+							bonus_count_remaining: hunt.bonus_count_remaining,
+							bonus_count_total: hunt.bonus_count_total,
+							x100_wins: hunt.x100_wins,
+							avg_per_bonus: hunt.avg_per_bonus,
+							avg_betsize: hunt.avg_betsize,
+							avg_payout: hunt.avg_payout,
+							info_start_cost: hunt.info_start_cost,
+							info_amount_won: hunt.info_amount_won,
+							info_highest_payout: hunt.info_highest_payout,
+							info_highest_multi: hunt.info_highest_multi,
+							info_running_average: hunt.info_running_average,
+							info_required_average: hunt.info_required_average,
+						}
+						: DEFAULT_HUNT_VALUES
+				};
+			});
+		};
+
+		if (huntData.length) setProcessedHunt(processHuntData(huntData));
+	}, [huntData]);
 
 	//score of how much it matches based on length of substring matched compared to total length
 	const getMatchScore = (field: string | null | undefined, query: string): number =>
@@ -112,15 +107,6 @@ export default function HuntTracker() {
 	const noPercent = ((noVotes / totalVotes) * 100).toFixed(1) + "%";
 
 	const toggleModal = () => setIsModalOpen((prev) => !prev);
-
-	const days = [
-		{ label: "S", fraction: "6/6" },
-		{ label: "F", fraction: "5/6" },
-		{ label: "T", fraction: "4/6" },
-		{ label: "W", fraction: "3/6" },
-		{ label: "T", fraction: "2/6" },
-		{ label: "M", fraction: "1/6" },
-	];
 
 	return (
 		<Layout title="Hunt">
@@ -214,7 +200,7 @@ export default function HuntTracker() {
 					<div className="flex-1 bg-[#161625] text-white rounded-lg p-4 shadow-md w-full">
 						{/* Day Buttons */}
 						<div className="flex space-x-2 mb-4">
-							{days.map((day, idx) => (
+							{processedHunt.map((day, idx) => (
 								<div
 									key={idx}
 									onClick={() => setActiveDay(idx)}
@@ -225,7 +211,7 @@ export default function HuntTracker() {
 								>
 									<span className="text-xs font-semibold">{day.label}</span>
 									<span className="text-[10px] text-gray-400">
-										{day.fraction}
+										{day.date}
 									</span>
 								</div>
 							))}
@@ -233,7 +219,7 @@ export default function HuntTracker() {
 
 						{/* Stats list */}
 						<div className="flex flex-col space-y-2.5 max-h-[200px] overflow-y-auto scrollbar-hide">
-							{Object.keys(stats).length === 0 ? (
+							{processedHunt.length === 0 ? (
 								Array.from({ length: 9 }).map((_, idx) => (
 									<div key={idx} className="flex items-center justify-between animate-pulse">
 										<span className="h-4 w-24 bg-[#2A2D3E] rounded"></span>
@@ -245,55 +231,55 @@ export default function HuntTracker() {
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Total Bonuses</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.total_bonuses}
+											{processedHunt[activeDay].data.bonus_count_total}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Current Bonus</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.current_bonus}
+											{processedHunt[activeDay].data.bonus_count_opened}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Total Win</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.total_win}
+											{processedHunt[activeDay].data.info_amount_won}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Date</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.date}
+											{processedHunt[activeDay].date}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Win/Bonus</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.win_bonus}
+											{processedHunt[activeDay].data.avg_per_bonus}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">100x Wins</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.x100_wins}
+											{processedHunt[activeDay].data.x100_wins}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Average Bet</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.avg_betsize}
+											{processedHunt[activeDay].data.avg_betsize}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Average Win</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.avg_payout}
+											{processedHunt[activeDay].data.avg_payout}
 										</span>
 									</div>
 									<div className="flex items-center justify-between">
 										<span className="text-[13px] font-medium">Average Multi</span>
 										<span className="text-[13px] font-medium text-[#989EAE]">
-											{stats.avg_multi}
+											{processedHunt[activeDay].data.info_running_average}
 										</span>
 									</div>
 								</>

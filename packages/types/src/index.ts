@@ -10,3 +10,5 @@ export * from './types/theme';
 export * from './types/user';
 export * from './types/hunt';
 export * from './types/raffles';
+export * from './types/cache';
+export * from './types/clip';

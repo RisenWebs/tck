@@ -71,6 +71,17 @@ function RaffleInfobox({ raffle }: { raffle: ISafeRaffle }) {
       return;
     }
 
+    if (response.status === 402) {
+      notifications.show({
+        title: 'Insufficient Balance',
+        message: 'You do not have enough balance to enter this raffle.',
+        color: 'yellow',
+        withBorder: true,
+        icon: <IconX />
+      });
+      return;
+    }
+
     if (response.status !== 200) {
       notifications.show({
         title: 'Error entering raffle',

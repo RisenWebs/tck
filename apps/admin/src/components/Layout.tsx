@@ -94,6 +94,7 @@ const SIDEBAR_DATA: {
   { link: '/raffles', label: 'Raffles', icon: IconDice5, permission: 'MANAGE_RAFFLES' },
   { link: '/giveaways', label: 'Giveaways', icon: IconGift, permission: 'MANAGE_GIVEAWAYS' },
   { link: '/reloads', label: 'Reloads', icon: IconGift, permission: 'MANAGE_RELOADS' },
+  { link: '/clips', label: 'Reloads', icon: IconGift, permission: 'MANAGE_CLIPS' },
   {
     link: '/leaderboards',
     label: 'Leaderboards',

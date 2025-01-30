@@ -359,14 +359,6 @@ export async function createGiveaway(
     // Send Discord notification.
     socket.emit('newGiveaway', giveaway);
     console.log('Discord notification sent for giveaway:', giveaway.id);
-
-    const timeout = timestampEnd - Date.now();
-    setTimeout(async () => {
-      console.log('Ending giveaway:', giveaway.id);
-      await endGiveaway(giveaway.id);
-    }, timeout);
-
-    console.log('Set timeout to end giveaway in', timeout, 'milliseconds');
   } catch (error) {
     console.error('Error creating giveaway:', error);
   }

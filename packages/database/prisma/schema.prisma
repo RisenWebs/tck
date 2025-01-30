@@ -75,8 +75,8 @@ model UnifiedCache {
 
   bestPayout   BestPayout @relation(fields: [bestPayoutId], references: [id], onDelete: Cascade)
   bestMulti    BestMulti  @relation(fields: [bestMultiId], references: [id], onDelete: Cascade)
-  bonus        Bonus[]
-  hunt         Hunt[]
+  bonus        Bonus[]    @relation("UnifiedCacheBonus")
+  hunt         Hunt[]     @relation("UnifiedCacheHunt")
 
   @@index([id, updatedAt])
 }
@@ -90,6 +90,7 @@ model BestPayout {
   timestamp   DateTime
 
   unifiedCache UnifiedCache? @relation
+  bestPayoutId String?       // This is now optional, Prisma will infer the relation from UnifiedCache
   @@index([slotName, timestamp])
 }
 
@@ -101,6 +102,7 @@ model BestMulti {
   multiplier  Float
 
   unifiedCache UnifiedCache? @relation
+  bestMultiId String?        // This is now optional, Prisma will infer the relation from UnifiedCache
   @@index([slotName])
 }
 
@@ -118,7 +120,8 @@ model Bonus {
   multiplierRaw  Float
   payoutRaw      Float
 
-  unifiedCache UnifiedCache? @relation
+  unifiedCacheId String?
+  unifiedCache   UnifiedCache? @relation("UnifiedCacheBonus", fields: [unifiedCacheId], references: [id])
   @@index([providerId, active])
 }
 
@@ -132,7 +135,8 @@ model Hunt {
   highestPayout    Float
   highestMultiplier Float
 
-  unifiedCache UnifiedCache? @relation
+  unifiedCacheId String?
+  unifiedCache   UnifiedCache? @relation("UnifiedCacheHunt", fields: [unifiedCacheId], references: [id])
   @@index([date])
 }
 

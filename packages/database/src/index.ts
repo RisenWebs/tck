@@ -21,6 +21,7 @@ export * from './functions/user/points';
 export * from './functions/user/user';
 export * from './functions/user/wallets';
 export * from './functions/raffles';
+export * from './functions/cache';
 
 
 if (process.env.NODE_ENV !== 'development') {

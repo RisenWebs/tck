@@ -1,16 +1,6 @@
+import { Clip } from 'types';
 import { prisma } from '../client';
 import { socket } from '../socket';
-
-type Clip = {
-    id: string;
-    title: string;
-    platform: 'YOUTUBE' | 'TIKTOK' | 'TWITTER' | 'INSTAGRAM' | 'KICK';
-    videoClip: string;
-    authorUser: string;
-    authorPfp: string;
-    createdAt: Date;
-    updatedAt: Date;
-};
 
 export const getAllClips = async (): Promise<Clip[]> => {
     return prisma.clip.findMany({
