@@ -3,7 +3,23 @@ import Layout from "@/components/Layout/Layout";
 import PageHeader from "@/components/PageHeader/PageHeader";
 import GameCard from "@/components/Hunt/GameCard";
 import axios from 'axios';
-import { huntData, bonusData, ProcessedHuntData, DEFAULT_HUNT_VALUES } from "types";
+import { huntData, bonusData, ProcessedHuntData } from "types";
+
+const DEFAULT_HUNT_VALUES = {
+    bonus_count_opened: '-',
+    bonus_count_remaining: '-',
+    bonus_count_total: '-',
+    x100_wins: '-',
+    avg_per_bonus: '-',
+    avg_betsize: '-',
+    avg_payout: '-',
+    info_start_cost: '-',
+    info_amount_won: '-',
+    info_highest_payout: '-',
+    info_highest_multi: '-',
+    info_running_average: '-',
+    info_required_average: '-',
+};
 
 export default function HuntTracker() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
